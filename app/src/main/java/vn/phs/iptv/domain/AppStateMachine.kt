@@ -15,6 +15,7 @@ import vn.phs.iptv.BuildConfig
 import vn.phs.iptv.data.IptvRepository
 import vn.phs.iptv.data.remote.dto.ContentResponse
 import vn.phs.iptv.data.remote.dto.ScreenResponse
+import java.util.Locale
 import javax.inject.Inject
 
 // Drives top-level navigation from the Screen poll; FCM is intentionally out of v1.
@@ -153,9 +154,17 @@ class AppStateMachine @Inject constructor(
             return
         }
 
+        val normalizedGuestName = stay.guestName
+            .trim()
+            .replace(Regex("\\s+"), " ")
+            .take(MAX_GUEST_NAME_LENGTH)
+            .takeUnless { it.lowercase(Locale.ROOT) in BLOCKED_GUEST_NAMES }
+            .orEmpty()
+            .ifBlank { "Guest" }
+
         _screenData.value = response
         _currentGuest.value = GuestProfile(
-            name = stay.guestName,
+            name = normalizedGuestName,
             title = "",
             roomNo = response.roomNo,
             nationality = "",
@@ -228,5 +237,9 @@ class AppStateMachine @Inject constructor(
 
     companion object {
         private const val TAG = "AppStateMachine"
+        private const val MAX_GUEST_NAME_LENGTH = 80
+        private val BLOCKED_GUEST_NAMES = setOf(
+            "ass", "test", "guest", "n/a", "na", "null", "unknown", "-",
+        )
     }
 }

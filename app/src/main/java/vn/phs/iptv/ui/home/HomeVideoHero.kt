@@ -69,6 +69,8 @@ import vn.phs.iptv.ui.theme.SurfaceTile1
  * The caller sizes it — Home gives it `Dim.HeroW` × `Dim.ArrivalH` so it matches the height of
  * the stay card next to it.
  */
+import vn.phs.iptv.ui.video.resolveVideoUri
+
 @Composable
 fun AppleVideoBillboard(
     eyebrow: String,
@@ -80,11 +82,8 @@ fun AppleVideoBillboard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    // Blank videoUrl = the branch uploaded no film of its own; the bundled ambient loop
-    // stands in so the hero is always alive. Passing it down (rather than falling back to
-    // the still face) keeps the billboard focusable and the "watch intro" CTA meaningful.
-    val film = videoUrl?.takeIf { it.isNotBlank() }
-        ?: RawResourceDataSource.buildRawResourceUri(R.raw.ambient).toString()
+    val context = LocalContext.current
+    val film = remember(videoUrl) { resolveVideoUri(context, videoUrl) }
     FilmBillboard(eyebrow, title, body, playLabel, film, imageUrl, onClick, modifier)
 }
 

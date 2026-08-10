@@ -133,7 +133,14 @@ private fun HomeContent(
             }
         }
         ?: s.welcomeBack
-    val date = remember { LocalDate.now().format(DateTimeFormatter.ofPattern("EEE, d MMM", Locale.ENGLISH)) }
+    val date = remember(language) {
+        val locale = when (language) {
+            AppLanguage.VI -> Locale.forLanguageTag("vi-VN")
+            AppLanguage.EN -> Locale.forLanguageTag("en-US")
+            AppLanguage.RU -> Locale.forLanguageTag("ru-RU")
+        }
+        LocalDate.now().format(DateTimeFormatter.ofPattern("EEE, d MMM", locale))
+    }
     // PMS often leaves the honorific empty, and "${title} ${name}" then renders a leading space.
     val guestName = remember(guest) {
         listOf(guest.title, guest.name).filter { it.isNotBlank() }.joinToString(" ")
@@ -168,6 +175,7 @@ private fun HomeContent(
         // already defined for the matching built-in tile. An unknown key has no
         // label to fall back on — drop it rather than print the raw code (§7).
         val labelKey = tile.key.tileLabelKey()
+        if (!BuildConfig.DEBUG && labelKey == "tv") return@mapIndexedNotNull null
         val builtIn = Demo.homeTiles.firstOrNull { it.id == labelKey }
         val (fallbackTitle, fallbackSub) = s.tile(labelKey, "", "")
         val title = tile.title.ifBlank { fallbackTitle }
@@ -203,7 +211,9 @@ private fun HomeContent(
     // Primary navigation rail destinations (localized). "home" returns focus to content.
     val railItems = buildList {
         add(NavRailItem("home", Icons.Rounded.Home, s.navHome) { firstTile.requestFocus() })
-        add(NavRailItem("livetv", Icons.Rounded.LiveTv, s.navLiveTv, onLiveTv))
+        if (BuildConfig.DEBUG) {
+            add(NavRailItem("livetv", Icons.Rounded.LiveTv, s.navLiveTv, onLiveTv))
+        }
         add(NavRailItem("menu", Icons.Rounded.RestaurantMenu, s.navMenu, onService))
         add(NavRailItem("services", Icons.Rounded.RoomService, s.navServices, onServices))
         add(NavRailItem("bill", Icons.Rounded.ReceiptLong, s.navBill, onBill))
@@ -341,8 +351,8 @@ private fun homeActions(
     val hasQr = !screenData?.qrUrl.isNullOrBlank()
     val firstService = contentData?.services.orEmpty()
         .firstNotNullOfOrNull { it.title.forLang(language).takeIf { title -> title.isNotBlank() } }
-    val roomNo = screenData?.roomNo ?: "114"
-    val folioTotal = screenData?.folio?.total?.toVnd() ?: "800.000 ₫"
+    val roomNo = screenData?.roomNo.orEmpty()
+    val folioTotal = screenData?.folio?.total?.toVnd() ?: "—"
 
     return buildList {
         if (hasQr) {

@@ -63,8 +63,7 @@ fun IntroVideoScreen(
     BackHandler { onEnded() }
 
     val context = LocalContext.current
-    val mediaUri = videoUrl?.takeIf { it.isNotBlank() }
-        ?: RawResourceDataSource.buildRawResourceUri(R.raw.ambient).toString()
+    val mediaUri = remember(videoUrl) { resolveVideoUri(context, videoUrl) }
     val exoPlayer = remember(mediaUri) {
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(MediaItem.fromUri(mediaUri))

@@ -15,6 +15,7 @@ import androidx.media3.datasource.RawResourceDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import vn.phs.iptv.R
+import vn.phs.iptv.ui.video.resolveVideoUri
 
 /**
  * A muted, looping full-bleed ambient video used behind hero/idle screens to give the
@@ -27,8 +28,7 @@ fun AmbientVideoBackground(
     videoUrl: String? = null,
 ) {
     val context = LocalContext.current
-    val mediaUri = videoUrl?.takeIf { it.isNotBlank() }
-        ?: RawResourceDataSource.buildRawResourceUri(R.raw.ambient).toString()
+    val mediaUri = remember(videoUrl) { resolveVideoUri(context, videoUrl) }
     val player = remember(mediaUri) {
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(MediaItem.fromUri(mediaUri))

@@ -96,7 +96,7 @@ private val ParchmentScheme = lightColorScheme(
 
 @Composable
 fun PhsAppTheme(
-    themeMode: AppThemeMode = AppThemeMode.DARK,
+    themeMode: AppThemeMode = LocalAppThemeMode.current,
     content: @Composable () -> Unit,
 ) {
     val isLight = themeMode == AppThemeMode.LIGHT
