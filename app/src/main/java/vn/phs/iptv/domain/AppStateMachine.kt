@@ -205,6 +205,17 @@ class AppStateMachine @Inject constructor(
         _screen.value = AppScreen.Home
     }
 
+    private val _themeMode = MutableStateFlow(vn.phs.iptv.ui.theme.AppThemeMode.DARK)
+    val themeMode: StateFlow<vn.phs.iptv.ui.theme.AppThemeMode> = _themeMode.asStateFlow()
+
+    fun toggleTheme() {
+        _themeMode.value = if (_themeMode.value == vn.phs.iptv.ui.theme.AppThemeMode.DARK) {
+            vn.phs.iptv.ui.theme.AppThemeMode.LIGHT
+        } else {
+            vn.phs.iptv.ui.theme.AppThemeMode.DARK
+        }
+    }
+
     fun navigateTo(screen: AppScreen) {
         _screen.value = screen
     }

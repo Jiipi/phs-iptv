@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import vn.phs.iptv.domain.AppScreen
 import vn.phs.iptv.domain.AppStateMachine
@@ -31,7 +33,8 @@ class MainActivity : ComponentActivity() {
         onBackPressedDispatcher.addCallback(this) { /* consume */ }
 
         setContent {
-            PhsAppTheme {
+            val themeMode by stateMachine.themeMode.collectAsStateWithLifecycle()
+            PhsAppTheme(themeMode = themeMode) {
                 AppNavigation(stateMachine = stateMachine)
             }
         }

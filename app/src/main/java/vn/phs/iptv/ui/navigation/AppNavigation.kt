@@ -135,6 +135,7 @@ fun AppNavigation(stateMachine: AppStateMachine) {
                     onHelp = { stateMachine.navigateTo(AppScreen.Help) },
                     onServices = { stateMachine.navigateTo(AppScreen.Services) },
                     onHotelIntro = { stateMachine.navigateTo(AppScreen.HotelIntro) },
+                    onToggleTheme = { stateMachine.toggleTheme() },
                     language = language,
                 )
             }

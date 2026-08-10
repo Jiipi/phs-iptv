@@ -374,6 +374,7 @@ fun AppleGuestHeader(
     date: String,
     language: vn.phs.iptv.domain.AppLanguage = vn.phs.iptv.domain.AppLanguage.EN,
     onLanguage: () -> Unit = {},
+    onToggleTheme: () -> Unit = {},
     languageModifier: Modifier = Modifier,
     modifier: Modifier = Modifier,
 ) {
@@ -394,10 +395,13 @@ fun AppleGuestHeader(
             Text(subtitle, style = MaterialTheme.typography.titleMedium, color = TextSecondary)
         }
 
-        // Right cluster — deliberately quiet (Apple restraint): one interactive control
-        // (the language pill) plus two lines of light metadata. No competing gold card.
+        // Right cluster — one interactive row (theme toggle + language pill) plus metadata
         Column(horizontalAlignment = Alignment.End) {
-            LanguagePill(language = language, onClick = onLanguage, modifier = languageModifier)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ThemeTogglePill(onToggleTheme = onToggleTheme)
+                Spacer(Modifier.width(12.dp))
+                LanguagePill(language = language, onClick = onLanguage, modifier = languageModifier)
+            }
             Spacer(Modifier.height(18.dp))
             Text(
                 "${vn.phs.iptv.ui.i18n.LocalUiStrings.current.roomWord} $roomNo",
@@ -467,6 +471,46 @@ fun LanguagePill(
                 )
                 Spacer(Modifier.width(10.dp))
                 Text("⌄", style = MaterialTheme.typography.labelLarge)
+            }
+        }
+    }
+}
+
+@Composable
+fun ThemeTogglePill(
+    onToggleTheme: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
+    var focused by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "themePill",
+    )
+    val pillBg = if (isLight) Color.Black.copy(alpha = 0.06f) else Color.White.copy(alpha = 0.10f)
+    val pillBorder = if (isLight) Color.Black.copy(alpha = 0.12f) else Color.White.copy(alpha = 0.16f)
+
+    Surface(
+        onClick = onToggleTheme,
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(100.dp)),
+        colors = ClickableSurfaceDefaults.colors(
+            containerColor = pillBg,
+            focusedContainerColor = GoldBright,
+            contentColor = TextPrimary,
+            focusedContentColor = OnGold,
+        ),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        border = ClickableSurfaceDefaults.border(
+            border = Border(BorderStroke(1.dp, pillBorder), shape = RoundedCornerShape(100.dp)),
+            focusedBorder = Border(BorderStroke(2.dp, GoldBright), shape = RoundedCornerShape(100.dp)),
+        ),
+        modifier = modifier.graphicsLayer { scaleX = scale; scaleY = scale }.onFocusChangedTo { focused = it },
+    ) {
+        Box(Modifier.heightIn(min = 48.dp).padding(horizontal = 16.dp), contentAlignment = Alignment.Center) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    if (isLight) "☀️ Light" else "🌙 Dark",
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                )
             }
         }
     }

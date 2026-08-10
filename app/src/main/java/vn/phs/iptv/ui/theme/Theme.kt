@@ -31,12 +31,29 @@ import androidx.tv.material3.lightColorScheme
 
 // Deep, premium dark with a faint cool undertone and a top-down gradient for depth —
 // rich rather than flat gray, so photographic posters and the accent blue pop.
+import androidx.compose.runtime.CompositionLocalProvider
+
+// Deep, premium dark with a faint cool undertone and a top-down gradient for depth —
+// rich rather than flat gray, so photographic posters and the accent blue pop.
 val TvBackground   = Color(0xFF0C0D11)   // canvas (deep)
 val TvBackgroundTop = Color(0xFF1A1D26)  // lighter, faintly blue top — gives the gradient depth
-val TextPrimary    = Color(0xFFFFFFFF)                    // 100% — primary label
-val TextSecondary  = Color(0xFFFFFFFF).copy(alpha = 0.60f) // 60% — secondary label
-val TextTertiary   = Color(0xFFFFFFFF).copy(alpha = 0.30f) // 30% — tertiary label
-val TextQuaternary = Color(0xFFFFFFFF).copy(alpha = 0.18f) // 18% — quaternary
+val TextPrimaryDark = Color(0xFFFFFFFF)                    // 100% — primary label on dark
+val TextSecondaryDark = Color(0xFFFFFFFF).copy(alpha = 0.60f) // 60% — secondary label on dark
+val TextPrimaryLight = Color(0xFF1D1D1F)                   // Apple Ink Charcoal on light
+val TextSecondaryLight = Color(0xFF1D1D1F).copy(alpha = 0.60f) // 60% — secondary label on light
+
+// Dynamic text color accessor depending on theme mode
+val TextPrimary: Color
+    @Composable get() = if (LocalAppThemeMode.current == AppThemeMode.LIGHT) TextPrimaryLight else TextPrimaryDark
+
+val TextSecondary: Color
+    @Composable get() = if (LocalAppThemeMode.current == AppThemeMode.LIGHT) TextSecondaryLight else TextSecondaryDark
+
+val TextTertiary: Color
+    @Composable get() = if (LocalAppThemeMode.current == AppThemeMode.LIGHT) Color(0xFF1D1D1F).copy(alpha = 0.35f) else Color(0xFFFFFFFF).copy(alpha = 0.30f)
+
+val TextQuaternary: Color
+    @Composable get() = if (LocalAppThemeMode.current == AppThemeMode.LIGHT) Color(0xFF1D1D1F).copy(alpha = 0.20f) else Color(0xFFFFFFFF).copy(alpha = 0.18f)
 
 // Research §1, §7: focus changes animate over ~0.15s ease-in-out (the UI's heartbeat).
 val FocusEasing = CubicBezierEasing(0.42f, 0f, 0.58f, 1f)  // Apple ease-in-out
@@ -50,49 +67,63 @@ private val TvDarkScheme = darkColorScheme(
     secondary          = GoldBright,
     onSecondary        = OnGold,
     background         = TvBackground,
-    onBackground       = TextPrimary,
+    onBackground       = TextPrimaryDark,
     surface            = SurfaceTile1,
-    onSurface          = TextPrimary,
+    onSurface          = TextPrimaryDark,
     surfaceVariant     = DarkCardRaised,
-    onSurfaceVariant   = TextSecondary,
+    onSurfaceVariant   = TextSecondaryDark,
     border             = HairlineOnDark,
     error              = Color(0xFFFF453A),
 )
 
-// Light "parchment" tile — used for the rare bright section (design.md alternation).
+// Light "parchment" tile — Apple Light theme (design.md alternation).
 private val ParchmentScheme = lightColorScheme(
-    primary            = ActionBlue,
+    primary            = GoldDeep,
     onPrimary          = Color.White,
+    primaryContainer   = Gold,
+    onPrimaryContainer = OnGold,
+    secondary          = GoldDeep,
+    onSecondary        = Color.White,
     background         = Parchment,
-    onBackground       = Ink,
+    onBackground       = TextPrimaryLight,
     surface            = Canvas,
-    onSurface          = Ink,
+    onSurface          = TextPrimaryLight,
     surfaceVariant     = Parchment,
-    onSurfaceVariant   = InkMuted80,
+    onSurfaceVariant   = TextSecondaryLight,
     border             = Hairline,
     error              = Color(0xFFB3261E),
 )
 
 @Composable
-fun PhsAppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = TvDarkScheme, typography = PhsTypography) {
-        Surface(modifier = Modifier.fillMaxSize(), colors = surfaceColorsBackground()) {
-            Box(
-                Modifier.fillMaxSize().background(
-                    Brush.verticalGradient(
-                        0.0f to TvBackgroundTop,
-                        0.45f to TvBackground,
-                        1.0f to TvBackground,
+fun PhsAppTheme(
+    themeMode: AppThemeMode = AppThemeMode.DARK,
+    content: @Composable () -> Unit,
+) {
+    val isLight = themeMode == AppThemeMode.LIGHT
+    val scheme = if (isLight) ParchmentScheme else TvDarkScheme
+    val bgTop = if (isLight) Color(0xFFFFFFFF) else TvBackgroundTop
+    val bgBottom = if (isLight) Parchment else TvBackground
+
+    CompositionLocalProvider(LocalAppThemeMode provides themeMode) {
+        MaterialTheme(colorScheme = scheme, typography = PhsTypography) {
+            Surface(modifier = Modifier.fillMaxSize(), colors = surfaceColorsBackground()) {
+                Box(
+                    Modifier.fillMaxSize().background(
+                        Brush.verticalGradient(
+                            0.0f to bgTop,
+                            0.45f to bgBottom,
+                            1.0f to bgBottom,
+                        ),
                     ),
-                ),
-            ) { content() }
+                ) { content() }
+            }
         }
     }
 }
 
 // Hero screens (Welcome / Idle) keep the same cinematic dark canvas in the tvOS look.
 @Composable
-fun PhsHeroTheme(content: @Composable () -> Unit) = PhsAppTheme(content)
+fun PhsHeroTheme(content: @Composable () -> Unit) = PhsAppTheme(themeMode = AppThemeMode.DARK, content = content)
 
 // Bright parchment section, when a screen wants the light-tile half of the rhythm.
 @Composable

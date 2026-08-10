@@ -84,9 +84,10 @@ fun HomeScreen(
     onHelp: () -> Unit = {},
     onServices: () -> Unit = {},
     onHotelIntro: () -> Unit = {},
+    onToggleTheme: () -> Unit = {},
     language: AppLanguage = AppLanguage.EN,
 ) {
-    PhsAppTheme { HomeContent(guest, screenData, contentData, onVoice, onBill, onService, onLiveTv, onLanguage, onHelp, onServices, onHotelIntro, language) }
+    HomeContent(guest, screenData, contentData, onVoice, onBill, onService, onLiveTv, onLanguage, onHelp, onServices, onHotelIntro, onToggleTheme, language)
 }
 
 @Composable
@@ -102,6 +103,7 @@ private fun HomeContent(
     onHelp: () -> Unit,
     onServices: () -> Unit,
     onHotelIntro: () -> Unit,
+    onToggleTheme: () -> Unit,
     language: AppLanguage,
 ) {
     val s = LocalUiStrings.current
@@ -252,6 +254,7 @@ private fun HomeContent(
                         date = date,
                         language = language,
                         onLanguage = onLanguage,
+                        onToggleTheme = onToggleTheme,
                     )
 
                     Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
