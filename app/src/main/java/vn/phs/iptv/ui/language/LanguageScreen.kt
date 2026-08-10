@@ -63,6 +63,7 @@ import vn.phs.iptv.ui.theme.FocusEasing
 import vn.phs.iptv.ui.theme.flagRes
 import vn.phs.iptv.ui.theme.Gold
 import vn.phs.iptv.ui.theme.GoldBright
+import vn.phs.iptv.ui.theme.LocalAppThemeMode
 import vn.phs.iptv.ui.theme.OnGold
 import vn.phs.iptv.ui.theme.PhsAppTheme
 import vn.phs.iptv.ui.theme.TextPrimary
@@ -83,6 +84,9 @@ import vn.phs.iptv.ui.theme.TvBackground
  * [backdropVideoUrl] is the hotel's own intro film when the PMS has uploaded one; the
  * ambient loop bundled in res/raw stands in when it hasn't.
  */
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.heightIn
+
 @Composable
 fun LanguageScreen(
     onSelected: (AppLanguage) -> Unit,
@@ -230,30 +234,24 @@ private fun ThemeTogglePill(
     val scale by animateFloatAsState(
         if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "themePill",
     )
-    val pillBg = if (isLight) Color.White.copy(alpha = 0.85f) else Color.Black.copy(alpha = 0.50f)
+    val pillBg = if (isLight) Color.White.copy(alpha = 0.85f) else Color.Black.copy(alpha = 0.55f)
     val pillText = if (isLight) Color(0xFF1D1D1F) else Color.White
 
-    Surface(
-        onClick = onToggleTheme,
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(100.dp)),
-        colors = ClickableSurfaceDefaults.colors(
-            containerColor = pillBg,
-            focusedContainerColor = GoldBright,
-            contentColor = pillText,
-            focusedContentColor = OnGold,
-        ),
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
-        border = ClickableSurfaceDefaults.border(
-            border = Border(BorderStroke(1.dp, Color.White.copy(alpha = 0.20f)), shape = RoundedCornerShape(100.dp)),
-            focusedBorder = Border(BorderStroke(2.dp, GoldBright), shape = RoundedCornerShape(100.dp)),
-        ),
-        modifier = modifier.graphicsLayer { scaleX = scale; scaleY = scale }.onFocusChanged { focused = it.isFocused },
+    Box(
+        modifier = modifier
+            .graphicsLayer { scaleX = scale; scaleY = scale }
+            .clip(RoundedCornerShape(100.dp))
+            .background(if (focused) GoldBright else pillBg)
+            .border(BorderStroke(if (focused) 2.dp else 1.dp, if (focused) GoldBright else Color.White.copy(alpha = 0.25f)), RoundedCornerShape(100.dp))
+            .onFocusChanged { focused = it.isFocused }
+            .clickable(onClick = onToggleTheme),
     ) {
-        Box(Modifier.heightIn(min = 44.dp).padding(horizontal = 20.dp), contentAlignment = Alignment.Center) {
+        Box(Modifier.heightIn(min = 44.dp).padding(horizontal = 24.dp), contentAlignment = Alignment.Center) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "Giao diện: ${if (isLight) "☀️ Light Mode" else "🌙 Dark Mode (Sang trọng)"}",
+                    "Chế độ giao diện: ${if (isLight) "Sáng (Light)" else "Tối (Dark)"}",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                    color = if (focused) OnGold else pillText,
                 )
             }
         }
@@ -268,46 +266,38 @@ private fun LanguageCard(
     onFocused: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
     var focused by remember { mutableStateOf(false) }
-    val scale by animateFloatAsState(if (focused) 1.06f else 1f, tween(160), label = "scale")
-    val elevation by animateDpAsState(if (focused) 24.dp else 0.dp, tween(160), label = "elev")
-    // Siblings recede slightly so the focused card is the hero — but stay clearly readable.
-    val alpha by animateFloatAsState(if (recede && !focused) 0.78f else 1f, tween(160), label = "alpha")
+    val scale by animateFloatAsState(if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "scale")
+    val alpha by animateFloatAsState(if (recede && !focused) 0.85f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "alpha")
 
-    Surface(
-        onClick = onClick,
-        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
-        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(26.dp)),
-        // Solid dark card — opaque enough to read crisply over the moving footage.
-        colors = ClickableSurfaceDefaults.colors(
-            containerColor = Color.Black.copy(alpha = 0.62f),
-            focusedContainerColor = Color.Black.copy(alpha = 0.66f),
-        ),
-        border = ClickableSurfaceDefaults.border(
-            border = Border(BorderStroke(1.dp, Color.White.copy(alpha = 0.10f)), shape = RoundedCornerShape(26.dp)),
-            focusedBorder = Border(BorderStroke(2.dp, GoldBright), shape = RoundedCornerShape(26.dp)),
-        ),
+    val cardShape = RoundedCornerShape(26.dp)
+    val cardBg = if (isLight) {
+        if (focused) Color.White.copy(alpha = 0.90f) else Color.White.copy(alpha = 0.70f)
+    } else {
+        if (focused) Color(0xFF1E222D).copy(alpha = 0.85f) else Color(0xFF12141C).copy(alpha = 0.65f)
+    }
+    val cardBorder = if (focused) GoldBright else (if (isLight) Color.White.copy(alpha = 0.40f) else Color.White.copy(alpha = 0.15f))
+
+    Box(
         modifier = modifier
             .size(width = 244.dp, height = 268.dp)
-            .graphicsLayer {
-                scaleX = scale; scaleY = scale
-                this.alpha = alpha
-                shadowElevation = elevation.toPx()
-                spotShadowColor = Gold; ambientShadowColor = Color.Black
-            }
+            .graphicsLayer { scaleX = scale; scaleY = scale; this.alpha = alpha }
+            .clip(cardShape)
+            .background(cardBg)
+            .border(BorderStroke(if (focused) 2.dp else 1.dp, cardBorder), cardShape)
             .onFocusChanged {
                 focused = it.isFocused
                 if (it.isFocused) onFocused()
-            },
+            }
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             Modifier.fillMaxSize().padding(horizontal = 22.dp, vertical = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            // Real national flag, cropped into a circular medallion with a fine ring —
-            // gold when focused. Bundled drawable (Android TV system fonts can't render
-            // flag emoji, and a kiosk network can't be trusted to fetch remote images).
             Image(
                 painter = painterResource(language.flagRes()),
                 contentDescription = language.english,
@@ -316,7 +306,7 @@ private fun LanguageCard(
                     .size(80.dp)
                     .clip(CircleShape)
                     .border(
-                        BorderStroke(2.dp, if (focused) GoldBright else Color.White.copy(alpha = 0.18f)),
+                        BorderStroke(2.dp, if (focused) GoldBright else Color.White.copy(alpha = 0.30f)),
                         CircleShape,
                     ),
             )
@@ -331,7 +321,7 @@ private fun LanguageCard(
             Text(
                 language.english.uppercase(),
                 style = MaterialTheme.typography.labelSmall.copy(letterSpacing = TextUnit(1.5f, TextUnitType.Sp)),
-                color = if (focused) GoldBright else TextTertiary,
+                color = if (focused) GoldBright else Gold.copy(alpha = 0.90f),
             )
         }
     }
