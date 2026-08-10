@@ -3,7 +3,9 @@
 package vn.phs.iptv.ui.provisioning
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -121,19 +123,23 @@ private fun ProvisioningContent(
 
             Spacer(Modifier.height(44.dp))
 
-            ApplePillButton(
-                text = "Làm mới mã · Refresh code",
-                onClick = onRefresh,
-                filled = false,
-                modifier = Modifier.focusRequester(refresh),
-            )
-            onDebugBypass?.let { bypass ->
-                Spacer(Modifier.height(16.dp))
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 ApplePillButton(
-                    text = "Debug: Bỏ qua",
-                    onClick = bypass,
+                    text = "Làm mới mã · Refresh code",
+                    onClick = onRefresh,
                     filled = false,
+                    modifier = Modifier.focusRequester(refresh),
                 )
+                onDebugBypass?.let { bypass ->
+                    ApplePillButton(
+                        text = "Debug: Bỏ qua",
+                        onClick = bypass,
+                        filled = false,
+                    )
+                }
             }
         }
     }

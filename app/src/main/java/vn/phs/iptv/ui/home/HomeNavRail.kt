@@ -49,6 +49,9 @@ import vn.phs.iptv.ui.theme.FocusDurationMs
 import vn.phs.iptv.ui.theme.FocusEasing
 import vn.phs.iptv.ui.theme.GoldBright
 import vn.phs.iptv.ui.theme.GoldDeep
+import vn.phs.iptv.ui.theme.LightAccent
+import vn.phs.iptv.ui.theme.LightNavRailBg
+import vn.phs.iptv.ui.theme.LightNavRailEdge
 import vn.phs.iptv.ui.theme.OnGold
 import vn.phs.iptv.ui.theme.GlassRadiusMd
 import vn.phs.iptv.ui.theme.TextSecondary
@@ -91,7 +94,6 @@ fun HomeNavRail(
     )
 
         val isLight = vn.phs.iptv.ui.theme.LocalAppThemeMode.current == vn.phs.iptv.ui.theme.AppThemeMode.LIGHT
-        val railBase = if (isLight) vn.phs.iptv.ui.theme.Parchment else TvBackground
         Column(
             modifier = modifier
                 .width(width)
@@ -103,18 +105,34 @@ fun HomeNavRail(
                     }
                 }
                 .focusGroup()
-                .background(
-                    Brush.horizontalGradient(
-                        0f to railBase.copy(alpha = if (isLight) 0.88f else 0.93f),
-                        0.7f to railBase.copy(alpha = if (isLight) 0.68f else 0.80f),
-                        1f to Color.Transparent,
-                    ),
-                )
-                .background(
-                    Brush.horizontalGradient(
-                        0f to (if (isLight) Color.Black.copy(alpha = 0.06f) else Color.White.copy(alpha = 0.06f)),
-                        0.8f to Color.Transparent,
-                    ),
+                .then(
+                    if (isLight) {
+                        // Solid Apple sidebar — LightNavRailBg + right hairline edge
+                        Modifier
+                            .background(LightNavRailBg)
+                            .background(
+                                Brush.horizontalGradient(
+                                    0.95f to Color.Transparent,
+                                    1f to LightNavRailEdge,
+                                ),
+                            )
+                    } else {
+                        // Dark Mode: translucent gradient (unchanged)
+                        Modifier
+                            .background(
+                                Brush.horizontalGradient(
+                                    0f to TvBackground.copy(alpha = 0.93f),
+                                    0.7f to TvBackground.copy(alpha = 0.80f),
+                                    1f to Color.Transparent,
+                                ),
+                            )
+                            .background(
+                                Brush.horizontalGradient(
+                                    0f to Color.White.copy(alpha = 0.06f),
+                                    0.8f to Color.Transparent,
+                                ),
+                            )
+                    }
                 )
                 .padding(start = 4.dp, end = 4.dp, top = 28.dp, bottom = 28.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
@@ -145,8 +163,8 @@ private fun NavRailRow(
         if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "railRow",
     )
     val shape = RoundedCornerShape(GlassRadiusMd)
-    val selBg = if (isLight) Color.Black.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.10f)
-    val selContent = if (isLight) GoldDeep else GoldBright
+    val selBg = if (isLight) LightAccent.copy(alpha = 0.12f) else Color.White.copy(alpha = 0.10f)
+    val selContent = if (isLight) LightAccent else GoldBright
     Surface(
         onClick = item.onSelect,
         shape = ClickableSurfaceDefaults.shape(shape),

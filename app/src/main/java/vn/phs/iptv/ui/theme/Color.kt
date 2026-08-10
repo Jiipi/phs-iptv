@@ -36,6 +36,15 @@ val InkMuted48     = Color(0xFF7A7A7A)   // disabled / fine print
 val DividerSoft    = Color(0xFFF0F0F0)
 val Hairline       = Color(0xFFE0E0E0)
 
+// ── Light-mode elevated surfaces (Apple System Colors) ──────────────────────────
+// These replace the generic white-at-alpha approach with purpose-built fills that
+// give cards depth and legibility on a bright canvas — matching real tvOS Light.
+val LightCardFill    = Color(0xFFFBFBFD)   // warm near-white, NOT pure #FFF
+val LightCardBorder  = Color(0xFFD1D1D6)   // Apple System Gray 4 — visible hairline
+val LightNavRailBg   = Color(0xFFF2F2F7)   // Apple System Gray 6 — sidebar solid
+val LightNavRailEdge = Color(0xFFE5E5EA)   // Apple System Gray 5 — sidebar right edge
+val LightAccent      = Color(0xFF8B6914)   // Dark Gold — ≥ 4.5:1 on white / parchment
+
 // ── Dark-tile companions tuned for a tvOS 10-foot canvas ────────────────────────
 // The app lives mostly on dark tiles; these add the faint separations design.md
 // builds from micro-step lightness changes between stacked dark surfaces.

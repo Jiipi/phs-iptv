@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Minimal platform theme — Compose owns all UI, this just prevents crash. -->
-    <style name="Theme.PhsIptv" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- The platform draws this window before Compose. Keep it aligned with the TV canvas
+         so cold start never flashes the default white Material.Light background. -->
+    <style name="Theme.PhsIptv" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/tv_background</item>
+        <item name="android:navigationBarColor">@color/tv_background</item>
+        <item name="android:statusBarColor">@color/tv_background</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:colorAccent">@color/primary_gold</item>
+    </style>
 </resources>

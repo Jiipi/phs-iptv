@@ -107,22 +107,23 @@ fun AppleDynamicBackdrop(imageUrl: String?, modifier: Modifier = Modifier) {
         }
         // Darken vertically for legibility + depth. Lighter than it used to be: the
         // backdrop is genuinely soft now, so less scrim is needed to read over it, and
-        // Scrim layer: Dark scrim in Dark Mode, Translucent Parchment wash in Light Mode.
+        // Scrim layer: Dark scrim in Dark Mode, lighter warm wash in Light Mode
+        // so the photo still tints the canvas with color and warmth.
         val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
-        val scrimBase = if (isLight) Parchment else TvBackground
+        val scrimBase = if (isLight) Color(0xFFF2F2F5) else TvBackground
         Box(
             Modifier.fillMaxSize().background(
                 Brush.verticalGradient(
-                    0f to scrimBase.copy(alpha = if (isLight) 0.52f else 0.46f),
-                    0.55f to scrimBase.copy(alpha = if (isLight) 0.70f else 0.76f),
-                    1f to scrimBase.copy(alpha = if (isLight) 0.88f else 0.96f),
+                    0f to scrimBase.copy(alpha = if (isLight) 0.38f else 0.46f),
+                    0.55f to scrimBase.copy(alpha = if (isLight) 0.62f else 0.76f),
+                    1f to scrimBase.copy(alpha = if (isLight) 0.82f else 0.96f),
                 ),
             ),
         )
         // Left scrim so the headline column reads cleanly
         Box(
             Modifier.fillMaxSize().background(
-                Brush.horizontalGradient(0f to scrimBase.copy(alpha = if (isLight) 0.48f else 0.5f), 0.65f to Color.Transparent),
+                Brush.horizontalGradient(0f to scrimBase.copy(alpha = if (isLight) 0.35f else 0.5f), 0.65f to Color.Transparent),
             ),
         )
     }
@@ -303,11 +304,12 @@ fun ApplePillButton(
     val scale by animateFloatAsState(
         if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "pill",
     )
+    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
     Surface(
         onClick = onClick,
         shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(100.dp)),
         colors = ClickableSurfaceDefaults.colors(
-            containerColor = if (filled) Gold else Color.White.copy(alpha = 0.12f),
+            containerColor = if (filled) Gold else (if (isLight) LightNavRailBg else Color.White.copy(alpha = 0.12f)),
             focusedContainerColor = GoldBright,
             contentColor = if (filled) OnGold else TextPrimary,
             focusedContentColor = OnGold,
@@ -338,15 +340,20 @@ fun AppleBackButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     val scale by animateFloatAsState(
         if (focused) 1.08f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "back",
     )
+    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
     Surface(
         onClick = onClick,
         shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(100.dp)),
         colors = ClickableSurfaceDefaults.colors(
-            containerColor = Color.White.copy(alpha = 0.12f),
+            containerColor = if (isLight) LightNavRailBg else Color.White.copy(alpha = 0.12f),
             focusedContainerColor = GoldBright,
             contentColor = TextPrimary, focusedContentColor = OnGold,
         ),
         scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        border = ClickableSurfaceDefaults.border(
+            border = if (isLight) Border(BorderStroke(1.dp, LightCardBorder), shape = RoundedCornerShape(100.dp)) else Border.None,
+            focusedBorder = Border(BorderStroke(2.dp, GoldBright), shape = RoundedCornerShape(100.dp)),
+        ),
         modifier = modifier.graphicsLayer { scaleX = scale; scaleY = scale }.onFocusChangedTo { focused = it },
     ) {
         Box(Modifier.heightIn(min = 52.dp).padding(horizontal = 22.dp), contentAlignment = Alignment.Center) {
@@ -436,17 +443,18 @@ fun LanguagePill(
     val scale by animateFloatAsState(
         if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "langPill",
     )
+    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
     Surface(
         onClick = onClick,
         shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(100.dp)),
         colors = ClickableSurfaceDefaults.colors(
-            containerColor = Color.White.copy(alpha = 0.10f),
+            containerColor = if (isLight) LightNavRailBg else Color.White.copy(alpha = 0.10f),
             focusedContainerColor = GoldBright,
             contentColor = TextPrimary, focusedContentColor = OnGold,
         ),
         scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
         border = ClickableSurfaceDefaults.border(
-            border = Border(BorderStroke(1.dp, Color.White.copy(alpha = 0.16f)), shape = RoundedCornerShape(100.dp)),
+            border = Border(BorderStroke(1.dp, if (isLight) LightCardBorder else Color.White.copy(alpha = 0.16f)), shape = RoundedCornerShape(100.dp)),
             focusedBorder = Border(BorderStroke(2.dp, GoldBright), shape = RoundedCornerShape(100.dp)),
         ),
         modifier = modifier.graphicsLayer { scaleX = scale; scaleY = scale }.onFocusChangedTo { focused = it },

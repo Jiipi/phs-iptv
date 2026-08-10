@@ -63,31 +63,55 @@ fun Modifier.glassSurface(
 ): Modifier {
     val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
 
+    // ── Light Mode: frosted cream card with drop shadow ─────────────────────
+    // Dark Mode: translucent white at low alpha (unchanged)
     val fillAlpha by animateFloatAsState(
-        targetValue = if (focused) (if (isLight) 0.62f else 0.14f) else (if (isLight) 0.42f else 0.07f),
+        targetValue = if (isLight) {
+            if (focused) 0.92f else 0.85f       // near-opaque frosted cream
+        } else {
+            if (focused) 0.14f else 0.07f       // translucent dark glass
+        },
         animationSpec = tween(FocusDurationMs, easing = FocusEasing),
         label = "glassFill",
     )
     val borderAlpha by animateFloatAsState(
-        targetValue = if (focused) (if (isLight) 0.45f else 0.22f) else (if (isLight) 0.18f else 0.12f),
+        targetValue = if (isLight) {
+            if (focused) 0.70f else 0.55f       // visible Apple System Gray 4
+        } else {
+            if (focused) 0.22f else 0.12f       // subtle white hairline
+        },
         animationSpec = tween(FocusDurationMs, easing = FocusEasing),
         label = "glassBorder",
     )
+    // Light: elevated shadow gives depth that opacity alone cannot provide on a bright canvas.
+    val shadowElevation by animateFloatAsState(
+        targetValue = if (isLight) (if (focused) 12f else 6f) else 0f,
+        animationSpec = tween(FocusDurationMs, easing = FocusEasing),
+        label = "glassShadow",
+    )
 
-    val baseFillColor = Color.White
-    val borderColor = if (focused) Gold else (if (isLight) Color(0xFFD6D0C4).copy(alpha = borderAlpha) else Color.White.copy(alpha = borderAlpha))
+    val baseFillColor = if (isLight) LightCardFill else Color.White
+    val borderColor = if (focused) Gold else (if (isLight) LightCardBorder.copy(alpha = borderAlpha) else Color.White.copy(alpha = borderAlpha))
     val glassSheen = if (isLight) {
         Brush.verticalGradient(
-            0.0f to Color.White.copy(alpha = 0.18f),
-            0.45f to Color.Transparent,
+            0.0f to Color.White.copy(alpha = 0.45f),   // strong top sheen
+            0.35f to Color.White.copy(alpha = 0.08f),   // fast fade
+            0.55f to Color.Transparent,
         )
     } else GlassSheen
 
     return this
+        .graphicsLayer {
+            this.shadowElevation = shadowElevation
+            this.shape = shape as androidx.compose.ui.graphics.Shape
+            this.clip = false
+            this.spotShadowColor = Color(0x26000000)   // 15% black shadow
+            this.ambientShadowColor = Color(0x14000000) // 8% ambient
+        }
         .clip(shape)
         .background(baseFillColor.copy(alpha = fillAlpha))
         .background(glassSheen)
-        .border(BorderStroke(1.dp, borderColor), shape)
+        .border(BorderStroke(if (isLight) 1.dp else 1.dp, borderColor), shape)
 }
 
 /**

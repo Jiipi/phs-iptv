@@ -101,8 +101,9 @@ fun PhsAppTheme(
 ) {
     val isLight = themeMode == AppThemeMode.LIGHT
     val scheme = if (isLight) ParchmentScheme else TvDarkScheme
-    val bgTop = if (isLight) Color(0xFFFFFFFF) else TvBackgroundTop
-    val bgBottom = if (isLight) Parchment else TvBackground
+    val bgTop = if (isLight) Color(0xFFF8F8FA) else TvBackgroundTop
+    val bgMid = if (isLight) Color(0xFFF2F2F5) else TvBackground
+    val bgBottom = if (isLight) Color(0xFFEDEDF0) else TvBackground
 
     CompositionLocalProvider(LocalAppThemeMode provides themeMode) {
         MaterialTheme(colorScheme = scheme, typography = PhsTypography) {
@@ -111,7 +112,7 @@ fun PhsAppTheme(
                     Modifier.fillMaxSize().background(
                         Brush.verticalGradient(
                             0.0f to bgTop,
-                            0.45f to bgBottom,
+                            0.45f to bgMid,
                             1.0f to bgBottom,
                         ),
                     ),

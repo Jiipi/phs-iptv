@@ -21,12 +21,12 @@
 
 | Màn hình | Kết quả | Vấn đề chính |
 |---|---|---|
-| Provisioning | Khá đồng bộ | Copy chỉ có tiếng Anh; nên coi đây là staff UI hoặc thêm song ngữ. |
-| Idle | Bố cục cinematic tốt | Ngày, Room/Wi‑Fi/Password/Hotline/Offline đang hard-code tiếng Anh. Dùng chung video background nên chịu lỗi white shutter. |
-| Welcome / Language | Focus card rõ, vùng an toàn tốt | Cold start có thể trắng 7–15 giây trước frame video đầu tiên. Theme toggle nằm thấp và Light mode chưa đồng bộ với màn hình con. |
+| Provisioning | Đã đồng bộ | Copy Việt/Anh, focus Làm mới và debug bypass cùng hàng, nằm trọn safe area. Debug bypass không có trong release. |
+| Idle | Bố cục cinematic tốt | White shutter đã được xử lý ở launch window và PlayerView; copy ngày/Room/Wi‑Fi còn ưu tiên tiếng Anh vì chưa có guest chọn ngôn ngữ. |
+| Welcome / Language | Focus card rõ, vùng an toàn tốt | Cold start đã có nền `#0C0D11` ngay frame đầu; Light mode được kế thừa trên màn hình con. |
 | Intro video | Full-bleed đúng kiểu IPTV | Đã sửa lỗi một lần OK vừa skip video vừa kích hoạt tile ở Home. |
-| Home | Hệ phân cấp tốt nhất app | Widget có mật độ chữ chưa đều; badge còn hard-code; dữ liệu demo xuất hiện ở debug; tên guest xấu từ PMS cần rule fallback/sanitize. |
-| Live TV | Header/focus/i18n đã đồng bộ | Channel vẫn lấy từ `Demo.channels`; chọn kênh chưa phát nội dung thật — đây là khoảng trống chức năng IPTV lớn nhất. |
+| Home | Hệ phân cấp tốt nhất app | Đã bỏ fallback phòng/tiền giả, badge guest-facing hard-code và ngày cố định `Locale.ENGLISH`; tên guest được trim/chặn placeholder. |
+| Live TV | Header/focus/i18n đã đồng bộ | Contract v1 không cung cấp channel/stream và ghi rõ Live TV/VOD ngoài phạm vi; production đã gate tính năng, mock chỉ còn ở debug. |
 | Folio | Đồng bộ, dễ đọc | Nên bổ sung skeleton/retry khi API lỗi thay vì chỉ giữ dữ liệu trống. |
 | Room service | QR flow rõ | Empty state nên có CTA gọi lễ tân/Help; QR lớn cần kiểm tra khả năng quét ở khoảng cách phòng thực tế. |
 | Hotel services | Row và hours chip hợp hệ thống | Empty/loading state còn quá thô; đã sửa focus mặc định về nút Quay lại. |
@@ -38,19 +38,19 @@
 ### P0 — chặn trải nghiệm chính
 
 - [x] Chặn toàn bộ KeyDown/KeyUp của OK trên Intro video để không click xuyên sang Home.
-- [ ] Thay white shutter của video nền bằng black/poster fallback. GitNexus đánh CRITICAL: 3 caller trực tiếp, 6 flow, 4 module; cần test riêng Language + Idle + Welcome trước khi merge.
-- [ ] Thay `Demo.channels` bằng nguồn channel/EPG/player thật; hiện Live TV mới là mock UI và `onClick` không làm gì.
+- [x] Thay white shutter bằng launch window + PlayerView nền `#0C0D11`, giữ frame khi reset và chuẩn hóa URI video. Đã test cold start thật trên box.
+- [x] Gate `Demo.channels`/Live TV khỏi production vì API v1 chưa có channel/EPG/stream; mock chỉ hiển thị trong debug. Khi backend bổ sung contract thì mới nối player thật.
 - [ ] Chốt ownership ADB/worktree khi test; không chạy hai phiên điều khiển remote và sửa theme cùng lúc.
 
 ### P1 — đồng bộ và khả dụng
 
 - [x] Live TV mở với header còn trên màn hình, focus mặc định ở Quay lại và nhãn Việt/Anh/Nga theo lựa chọn.
 - [x] Hotel services luôn có focus an toàn khi loading/empty.
-- [ ] Chọn một chiến lược theme: chỉ dark cho toàn app, hoặc bỏ mọi `PhsAppTheme {}` lồng để Light mode được kế thừa trên tất cả màn hình. Trạng thái hiện tại vẫn là Light ở Language/Home nhưng sub-page tự quay về dark.
+- [x] `PhsAppTheme` lồng kế thừa `LocalAppThemeMode`; đã test Light trên Home, Live TV debug, Folio, Order, Services và Help.
 - [ ] Tạo component chung `LoadingState / EmptyState / ErrorState` có icon, mô tả ngắn, CTA và focus.
 - [ ] Đưa copy hard-code của Idle, Live badge, Home badge, Voice và Provisioning vào hệ i18n.
-- [ ] Format ngày theo `AppLanguage`, không cố định `Locale.ENGLISH`.
-- [ ] Chuẩn hóa dữ liệu guest từ PMS: trim, không hiện tên rỗng/test, có fallback “Quý khách”.
+- [x] Format ngày Home theo `AppLanguage` (`vi-VN`, `en-US`, `ru-RU`).
+- [x] Chuẩn hóa guest từ PMS: trim/gộp khoảng trắng, giới hạn 80 ký tự, chặn placeholder và fallback `Guest`.
 
 ### P2 — hoàn thiện hình ảnh
 
@@ -62,7 +62,7 @@
 
 ## Ma trận nghiệm thu vòng kế tiếp
 
-- Cold start: không trắng quá 300ms; có black/poster fallback ngay frame đầu.
+- Cold start: nền tối xuất hiện ngay starting window; không còn frame trắng trước Compose/video.
 - HOME luôn về Language; BACK từ màn hình con về Home; BACK ở Home về Language; không thoát kiosk.
 - Một lần OK ở Intro chỉ về Home, không mở tile.
 - Mỗi route có đúng một focus ban đầu và focus ring nhìn rõ ở khoảng cách 2–3m.
@@ -77,3 +77,6 @@
 - `shots/audit-after-cold.png`: frame trắng khi cold start (white shutter).
 - `shots/audit-skip-result.xml`: sau một lần OK skip, vẫn ở Home thay vì mở Room service.
 - `shots/audit-livetv-result.xml`: hierarchy xác nhận `Truyền hình`, `8 kênh`, `Đang phát`, `Tất cả kênh` và focus Quay lại.
+- `shots/audit-cold-dark-final.png`: frame đầu cold start đã là nền tối thay vì trắng.
+- `shots/audit-home-light-final.png`: Home Light Mode, ngày Việt hóa và dữ liệu PMS thật.
+- `shots/audit-folio-light-final.xml`, `audit-order-light-final.xml`, `audit-services-light-final.xml`, `audit-help-light-final.xml`: regression theme/focus trên các màn con.

@@ -54,6 +54,7 @@ import vn.phs.iptv.ui.theme.GlassRadiusLg
 import vn.phs.iptv.ui.theme.Gold
 import vn.phs.iptv.ui.theme.GoldBright
 import vn.phs.iptv.ui.theme.GoldDeep
+import vn.phs.iptv.ui.theme.LightAccent
 import vn.phs.iptv.ui.theme.LocalAppThemeMode
 import vn.phs.iptv.ui.theme.PhsAppTheme
 import vn.phs.iptv.ui.theme.TextPrimary
@@ -151,7 +152,7 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
                     )
                     Spacer(Modifier.width(6.dp))
                     val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
-                    val titleColor = if (isLight) GoldDeep else (if (focused) GoldBright else Gold)
+                    val titleColor = if (isLight) LightAccent else (if (focused) GoldBright else Gold)
                     Text(
                         text = action.title.uppercase(),
                         style = MaterialTheme.typography.labelSmall.copy(
@@ -165,8 +166,8 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
                 }
                 if (action.badge != null) {
                     val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
-                    val badgeBg = if (isLight) GoldDeep.copy(alpha = 0.15f) else Gold.copy(alpha = 0.20f)
-                    val badgeText = if (isLight) GoldDeep else GoldBright
+                    val badgeBg = if (isLight) LightAccent.copy(alpha = 0.15f) else Gold.copy(alpha = 0.20f)
+                    val badgeText = if (isLight) LightAccent else GoldBright
                     Surface(
                         shape = RoundedCornerShape(4.dp),
                         colors = SurfaceDefaults.colors(

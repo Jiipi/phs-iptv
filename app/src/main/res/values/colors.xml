@@ -2,6 +2,7 @@
 <!-- Raw color values for use in XML resources (drawables, themes).
      Kotlin screens must use tokens from ui/theme/Color.kt — not these. -->
 <resources>
+    <color name="tv_background">#FF0C0D11</color>
     <color name="midnight_navy">#FF1F2937</color>
     <color name="primary_gold">#FFC9A961</color>
     <color name="antique_gold">#FFA88932</color>
