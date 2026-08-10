@@ -117,6 +117,7 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
     var focused by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(GlassRadiusLg)
     val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
+    val accentColor = if (isLight) LightAccent else (if (focused) GoldBright else Gold)
 
     Surface(
         onClick = action.onClick,
@@ -138,24 +139,41 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 18.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Icon(
-                action.icon,
-                contentDescription = null,
-                tint = if (isLight) LightAccent else (if (focused) GoldBright else Gold),
-                modifier = Modifier.size(22.dp),
-            )
-            Spacer(Modifier.width(10.dp))
-            Text(
-                text = action.title,
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                color = TextPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            // Left: icon + title
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f, fill = false),
+            ) {
+                Icon(
+                    action.icon,
+                    contentDescription = null,
+                    tint = accentColor,
+                    modifier = Modifier.size(20.dp),
+                )
+                Spacer(Modifier.width(10.dp))
+                Text(
+                    text = action.title,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = TextPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+            // Right: highlight value (e.g. "9.790.000 đ", "24/7", "Wi-Fi · abc")
+            if (action.highlightValue != null) {
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    text = action.highlightValue,
+                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                    color = accentColor,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }
