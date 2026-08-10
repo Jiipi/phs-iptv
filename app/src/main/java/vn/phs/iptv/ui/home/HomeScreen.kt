@@ -218,11 +218,8 @@ private fun HomeContent(
 
     val actions = homeActions(screenData, contentData, language, onService, onBill, onServices, onHelp)
 
-    // Home is the kiosk's root: BACK must stop here. Without this the event falls through to
-    // the Activity, which finishes it — and because this app IS the LEANBACK_LAUNCHER, there
-    // is nothing behind it to return to. The guest is left on a dead screen with no way back
-    // (the state machine still says Home, so no re-navigation is ever triggered).
-    BackHandler { firstTile.requestFocus() }
+    // BACK on Home returns to the language selection screen so the guest can change language at any time.
+    BackHandler { onLanguage() }
 
     Box(Modifier.fillMaxSize()) {
         AppleDynamicBackdrop(backdrop)
