@@ -544,6 +544,7 @@ fun AppleSectionHeader(text: String, modifier: Modifier = Modifier) {
 // ── Layout system (single source of truth — best-practice 10-foot spacing) ───────
 object Dim {
     val Side = 80.dp        // overscan-safe left/right inset — identical on every screen
+    val ContentStart = 96.dp // left inset for Home content — clears the 72dp collapsed NavRail + 24dp gap
     val Top = 56.dp         // top inset
     val Bottom = 56.dp
     val ShelfGap = 36.dp    // vertical gap between shelves

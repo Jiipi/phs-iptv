@@ -249,7 +249,7 @@ private fun HomeContent(
             item(key = "arrival") {
                 Column(
                     modifier = Modifier
-                        .padding(horizontal = Dim.Side)
+                        .padding(start = Dim.ContentStart, end = 48.dp)
                         .onFocusChanged { if (it.hasFocus) backdrop = defaultBackdrop },
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                 ) {
