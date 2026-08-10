@@ -63,6 +63,7 @@ import vn.phs.iptv.ui.theme.FocusEasing
 import vn.phs.iptv.ui.theme.flagRes
 import vn.phs.iptv.ui.theme.Gold
 import vn.phs.iptv.ui.theme.GoldBright
+import vn.phs.iptv.ui.theme.GoldDeep
 import vn.phs.iptv.ui.theme.LocalAppThemeMode
 import vn.phs.iptv.ui.theme.OnGold
 import vn.phs.iptv.ui.theme.PhsAppTheme
@@ -140,7 +141,7 @@ private fun LanguageContent(
                     fontWeight = FontWeight.Bold,
                     letterSpacing = TextUnit(3f, TextUnitType.Sp),
                 ),
-                color = TextPrimary,
+                color = Color.White,
             )
             Spacer(Modifier.height(8.dp))
             Box(
@@ -163,7 +164,7 @@ private fun LanguageContent(
                 Text(
                     "${guest.title} ${guest.name}",
                     style = MaterialTheme.typography.displaySmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = TextPrimary,
+                    color = Color.White,
                     textAlign = TextAlign.Center,
                 )
                 Spacer(Modifier.height(8.dp))
@@ -187,14 +188,14 @@ private fun LanguageContent(
                 Text(
                     "Select your language",
                     style = MaterialTheme.typography.displaySmall,
-                    color = TextPrimary,
+                    color = Color.White,
                     textAlign = TextAlign.Center,
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
                     "Chọn ngôn ngữ  ·  Выберите язык",
                     style = MaterialTheme.typography.titleMedium,
-                    color = TextSecondary,
+                    color = Color.White.copy(alpha = 0.70f),
                     textAlign = TextAlign.Center,
                 )
             }
@@ -235,7 +236,7 @@ private fun ThemeTogglePill(
         if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "themePill",
     )
     val pillBg = if (isLight) Color.White.copy(alpha = 0.85f) else Color.Black.copy(alpha = 0.55f)
-    val pillText = if (isLight) Color(0xFF1D1D1F) else Color.White
+    val pillText = if (isLight) Color(0xFF111113) else Color.White
 
     Box(
         modifier = modifier
@@ -273,11 +274,13 @@ private fun LanguageCard(
 
     val cardShape = RoundedCornerShape(26.dp)
     val cardBg = if (isLight) {
-        if (focused) Color.White.copy(alpha = 0.90f) else Color.White.copy(alpha = 0.70f)
+        if (focused) Color.White.copy(alpha = 0.92f) else Color.White.copy(alpha = 0.72f)
     } else {
         if (focused) Color(0xFF1E222D).copy(alpha = 0.85f) else Color(0xFF12141C).copy(alpha = 0.65f)
     }
     val cardBorder = if (focused) GoldBright else (if (isLight) Color.White.copy(alpha = 0.40f) else Color.White.copy(alpha = 0.15f))
+    val endonymColor = if (isLight) Color(0xFF111113) else Color.White
+    val subtitleColor = if (isLight) GoldDeep else (if (focused) GoldBright else Gold.copy(alpha = 0.90f))
 
     Box(
         modifier = modifier
@@ -315,13 +318,13 @@ private fun LanguageCard(
             Text(
                 language.endonym,
                 style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.SemiBold),
-                color = TextPrimary,
+                color = endonymColor,
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 language.english.uppercase(),
-                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = TextUnit(1.5f, TextUnitType.Sp)),
-                color = if (focused) GoldBright else Gold.copy(alpha = 0.90f),
+                style = MaterialTheme.typography.labelSmall.copy(letterSpacing = TextUnit(1.5f, TextUnitType.Sp), fontWeight = FontWeight.Bold),
+                color = subtitleColor,
             )
         }
     }
