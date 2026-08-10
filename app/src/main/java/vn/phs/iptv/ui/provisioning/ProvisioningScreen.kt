@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
+import vn.phs.iptv.BuildConfig
 import vn.phs.iptv.ui.theme.ApplePillButton
 import vn.phs.iptv.ui.theme.PhsAppTheme
 import vn.phs.iptv.ui.theme.SkyLinkBlue
@@ -44,6 +45,7 @@ fun ProvisioningScreen(viewModel: ProvisioningViewModel, onProvisioned: () -> Un
             ProvisioningContent(
                 uiState = uiState,
                 onRefresh = viewModel::refresh,
+                onDebugBypass = if (BuildConfig.DEBUG) onProvisioned else null,
             )
         }
     }
@@ -53,6 +55,7 @@ fun ProvisioningScreen(viewModel: ProvisioningViewModel, onProvisioned: () -> Un
 private fun ProvisioningContent(
     uiState: ProvisioningUiState,
     onRefresh: () -> Unit,
+    onDebugBypass: (() -> Unit)? = null,
 ) {
     val refresh = remember { FocusRequester() }
     LaunchedEffect(uiState) {
@@ -72,7 +75,7 @@ private fun ProvisioningContent(
             Text("PHS", style = MaterialTheme.typography.headlineLarge, color = TextSecondary)
             Spacer(Modifier.height(20.dp))
             Text(
-                "Connect this device",
+                "Kết nối thiết bị · Connect this device",
                 style = MaterialTheme.typography.displayMedium,
                 color = TextPrimary,
                 textAlign = TextAlign.Center,
@@ -81,10 +84,10 @@ private fun ProvisioningContent(
 
             when (uiState) {
                 is ProvisioningUiState.Registering -> {
-                    Text("Registering…", style = MaterialTheme.typography.titleLarge, color = TextSecondary)
+                    Text("Đang đăng ký… · Registering…", style = MaterialTheme.typography.titleLarge, color = TextSecondary)
                 }
                 is ProvisioningUiState.WaitingForAssignment -> {
-                    Text("DEVICE CODE", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
+                    Text("MÃ THIẾT BỊ · DEVICE CODE", style = MaterialTheme.typography.bodySmall, color = TextSecondary)
                     Spacer(Modifier.height(10.dp))
                     Text(
                         uiState.displayCode,
@@ -97,13 +100,13 @@ private fun ProvisioningContent(
                     )
                     Spacer(Modifier.height(24.dp))
                     Text(
-                        "Ask reception to assign a room to this code in the PHS console.",
+                        "Nhờ lễ tân gán phòng cho mã này trên PHS Console.\nAsk reception to assign this code to a room.",
                         style = MaterialTheme.typography.titleLarge,
                         color = TextSecondary,
                         textAlign = TextAlign.Center,
                     )
                     Spacer(Modifier.height(6.dp))
-                    Text("Waiting for assignment…", style = MaterialTheme.typography.bodyMedium, color = TextSecondary)
+                    Text("Đang chờ gán phòng… · Waiting for assignment…", style = MaterialTheme.typography.bodyMedium, color = TextSecondary)
                 }
                 is ProvisioningUiState.Error -> {
                     Text(
@@ -119,11 +122,19 @@ private fun ProvisioningContent(
             Spacer(Modifier.height(44.dp))
 
             ApplePillButton(
-                text = "Refresh code",
+                text = "Làm mới mã · Refresh code",
                 onClick = onRefresh,
                 filled = false,
                 modifier = Modifier.focusRequester(refresh),
             )
+            onDebugBypass?.let { bypass ->
+                Spacer(Modifier.height(16.dp))
+                ApplePillButton(
+                    text = "Debug: Bỏ qua",
+                    onClick = bypass,
+                    filled = false,
+                )
+            }
         }
     }
 }

@@ -45,6 +45,18 @@ class ProvisioningDataStore @Inject constructor(
         dataStore.edit { it.remove(keyDeviceToken) }
     }
 
+    suspend fun clearDeviceSecret() {
+        dataStore.edit { it.remove(keyDeviceSecret) }
+    }
+
+    suspend fun clearDeviceCredentials() {
+        dataStore.edit {
+            it.remove(keyDeviceToken)
+            it.remove(keyDeviceSecret)
+            it.remove(keyRoomNo)
+        }
+    }
+
     suspend fun roomNo(): String? = dataStore.data.first()[keyRoomNo]
 
     suspend fun setRoomNo(roomNo: String) {

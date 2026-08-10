@@ -351,7 +351,14 @@ private fun homeActions(
     val hasQr = !screenData?.qrUrl.isNullOrBlank()
     val firstService = contentData?.services.orEmpty()
         .firstNotNullOfOrNull { it.title.forLang(language).takeIf { title -> title.isNotBlank() } }
-    val roomNo = screenData?.roomNo.orEmpty()
+    val serviceHighlights = contentData?.services.orEmpty()
+        .mapNotNull { it.title.forLang(language).takeIf(String::isNotBlank) }
+        .take(3)
+        .joinToString(" · ")
+    val wifiSummary = screenData?.hotel?.wifiSsid
+        ?.takeIf { it.isNotBlank() }
+        ?.let { "Wi-Fi · $it" }
+        ?: s.hotelInfo
     val folioTotal = screenData?.folio?.total?.toVnd() ?: "—"
 
     return buildList {
@@ -375,8 +382,8 @@ private fun homeActions(
                 id = "bill",
                 icon = Icons.Rounded.ReceiptLong,
                 title = billTitle,
-                subtitle = billSub.takeIf { it.isNotBlank() } ?: "Tạm tính lưu trú",
-                badge = "TẠM TÍNH",
+                subtitle = billSub.takeIf { it.isNotBlank() } ?: s.folioHeading,
+                badge = "PMS",
                 highlightValue = folioTotal,
                 onClick = onBill,
             ),
@@ -389,8 +396,8 @@ private fun homeActions(
                     icon = Icons.Rounded.RoomService,
                     title = title,
                     subtitle = firstService,
-                    badge = "5 SAO",
-                    highlightValue = "Spa · Hồ bơi · Gym",
+                    badge = "HOTEL",
+                    highlightValue = serviceHighlights.ifBlank { firstService },
                     onClick = onServices,
                 ),
             )
@@ -401,9 +408,9 @@ private fun homeActions(
                 id = "help",
                 icon = Icons.Rounded.Info,
                 title = helpTitle,
-                subtitle = helpSub.takeIf { it.isNotBlank() } ?: "Thông tin phòng & hỗ trợ",
-                badge = "FREE",
-                highlightValue = "Wi-Fi: Phòng $roomNo",
+                subtitle = helpSub.takeIf { it.isNotBlank() } ?: s.hotelInfo,
+                badge = "INFO",
+                highlightValue = wifiSummary,
                 onClick = onHelp,
             ),
         )

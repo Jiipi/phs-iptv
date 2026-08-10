@@ -14,6 +14,8 @@ import vn.phs.iptv.data.IptvRepository
 import vn.phs.iptv.data.remote.dto.MeResponse
 import javax.inject.Inject
 
+import retrofit2.HttpException
+
 sealed interface ProvisioningUiState {
     data object Registering : ProvisioningUiState
     data class WaitingForAssignment(val displayCode: String) : ProvisioningUiState
@@ -70,10 +72,13 @@ class ProvisioningViewModel @Inject constructor(
                 _uiState.value = ProvisioningUiState.WaitingForAssignment(displayCode)
             } catch (e: Exception) {
                 val apiError = repository.apiError(e)
-                if (apiError?.mess == "systemalert.iptv.device.invalid") {
-                    _uiState.value = ProvisioningUiState.Error(
-                        "Thiết bị chưa đăng ký, vui lòng liên hệ lễ tân."
-                    )
+                if (apiError?.mess == "systemalert.iptv.device.invalid" ||
+                    apiError?.mess == "systemalert.iptv.auth.denied" ||
+                    (e is HttpException && (e.code() == 401 || e.code() == 404))
+                ) {
+                    // PMS unassigned/deleted this device. Clear credentials and auto re-register to obtain a new display code!
+                    repository.clearDeviceCredentials()
+                    register()
                     return
                 }
                 // Network and temporary server errors keep the pairing code visible.

@@ -23,7 +23,22 @@ class IptvRepository @Inject constructor(
 ) {
     suspend fun preparePairing(): MeResponse {
         val deviceId = store.getOrCreateDeviceId()
-        if (store.deviceSecret() != null) return checkPairing()
+        if (store.deviceSecret() != null) {
+            try {
+                return checkPairing()
+            } catch (e: Exception) {
+                val apiErr = apiError(e)
+                if (apiErr?.mess == "systemalert.iptv.device.invalid" ||
+                    apiErr?.mess == "systemalert.iptv.auth.denied" ||
+                    (e is HttpException && (e.code() == 401 || e.code() == 404))
+                ) {
+                    // PMS deleted or invalidated this device — clear stale secret/token so we re-register below!
+                    store.clearDeviceCredentials()
+                } else {
+                    throw e
+                }
+            }
+        }
 
         val response = api.register(
             RegisterRequest(
@@ -31,11 +46,7 @@ class IptvRepository @Inject constructor(
                 appVersion = BuildConfig.VERSION_NAME,
             )
         )
-        val secret = response.deviceSecret
-            ?: throw DeviceCredentialException(
-                "Thiết bị đã tồn tại nhưng không còn khóa ghép nối. Vui lòng liên hệ lễ tân."
-            )
-        store.setDeviceSecret(secret)
+        response.deviceSecret?.let { store.setDeviceSecret(it) }
         return MeResponse(
             status = response.status,
             displayCode = response.displayCode,
@@ -66,6 +77,8 @@ class IptvRepository @Inject constructor(
     }
 
     suspend fun clearDeviceToken() = store.clearDeviceToken()
+
+    suspend fun clearDeviceCredentials() = store.clearDeviceCredentials()
 
     suspend fun screen(): ScreenResponse = api.screen(bearer())
 

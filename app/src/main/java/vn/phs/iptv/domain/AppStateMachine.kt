@@ -137,7 +137,7 @@ class AppStateMachine @Inject constructor(
     }
 
     private suspend fun resetToProvisioning() {
-        iptvRepository.clearDeviceToken()
+        iptvRepository.clearDeviceCredentials()
         contentPollJob?.cancel()
         _contentData.value = null
         clearGuestSession()
