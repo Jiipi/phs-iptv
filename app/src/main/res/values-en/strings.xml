@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="provisioning_headline">Connect Device</string>
+    <string name="provisioning_instruction">Please ask reception to select the corresponding room in the PHS system to pair this device</string>
+    <string name="provisioning_refresh">Refresh Code</string>
+    <string name="provisioning_success">Device connected</string>
+    <string name="provisioning_error">Connection failed, please try again</string>
+    <string name="idle_hotel_name">PHS Hotel</string>
+    <string name="idle_offline_badge">Offline</string>
+    <string name="idle_debug_checkin">Debug: Simulate Check-in</string>
+    <string name="welcome_greeting">Welcome</string>
+    <string name="welcome_room">Room</string>
+    <string name="welcome_birthday">Happy Birthday</string>
+    <string name="welcome_skip">Skip</string>
+    <string name="video_skip_hint">Press Back or OK to skip</string>
+    <string name="home_greeting">Welcome,</string>
+    <string name="home_card_voice">Assistant</string>
+    <string name="home_card_folio">My Bill</string>
+    <string name="home_coming_soon">Coming soon</string>
+    <string name="voice_idle_hint">Press to ask</string>
+    <string name="voice_listening">Listening…</string>
+    <string name="voice_thinking">Thinking…</string>
+    <string name="voice_speaking">Answering…</string>
+    <string name="voice_error">Could not hear you</string>
+</resources>

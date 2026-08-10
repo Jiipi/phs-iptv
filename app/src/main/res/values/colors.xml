@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Raw color values for use in XML resources (drawables, themes).
+     Kotlin screens must use tokens from ui/theme/Color.kt — not these. -->
+<resources>
+    <color name="midnight_navy">#FF1F2937</color>
+    <color name="primary_gold">#FFC9A961</color>
+    <color name="antique_gold">#FFA88932</color>
+    <color name="ivory_cream">#FFFAF7F0</color>
+</resources>

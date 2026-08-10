@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Placeholder foreground: "P" lettermark in gold. Replace with full logo vector. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="@color/primary_gold"
+        android:pathData="M36,24 L36,84 L48,84 L48,60 L60,60 Q76,60 76,42 Q76,24 60,24 Z
+                          M48,36 L58,36 Q64,36 64,42 Q64,48 58,48 L48,48 Z" />
+</vector>

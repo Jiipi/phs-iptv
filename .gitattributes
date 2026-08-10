@@ -1,0 +1,12 @@
+# Chuẩn hóa line endings: mọi text file dùng LF trong repo.
+# Windows checkout tự chuyển LF→CRLF; Ubuntu giữ nguyên LF.
+* text=auto eol=lf
+
+# Script cần LF tuyệt đối (Unix shebang)
+gradlew text eol=lf
+
+# Binary — không đụng
+*.jar binary
+*.png binary
+*.webp binary
+*.9.png binary

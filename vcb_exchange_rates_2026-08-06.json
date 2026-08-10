@@ -1,0 +1,717 @@
+{
+  "metadata": {
+    "title": "Vietcombank exchange-rate snapshots for 2026-08-06",
+    "bank": "Vietcombank",
+    "date": "2026-08-06",
+    "timezone": "Asia/Ho_Chi_Minh",
+    "unit": "VND per 1 unit of foreign currency",
+    "generated_at": "2026-08-07T16:32:00+07:00",
+    "scope": "Consolidation of intraday snapshots found on the public web. Observed snapshots are kept separate from hourly reconstructed USD/VND values.",
+    "important_note": "Vietcombank's public page does not expose a complete public intraday event history. Therefore, records marked observed/partial_observed come from timestamped public snapshots or reporting that quoted Vietcombank at that time. Records marked reconstructed_locf are estimates using the last observed price level and must not be presented as direct VCB snapshots."
+  },
+  "source_catalog": [
+    {
+      "id": "congcutaichinh_vcb_api_snapshots",
+      "name": "Công Cụ Tài Chính - Vietcombank API snapshots",
+      "url": "https://gia.congcutaichinh.org/ty-gia",
+      "detail_usd": "https://gia.congcutaichinh.org/ma/USD",
+      "detail_aud": "https://gia.congcutaichinh.org/ma/AUD",
+      "notes": "States source is Vietcombank exchangerates API and captures snapshots at 06:00, 12:00 and 18:00 Vietnam time. Detail pages provide buy/sell only."
+    },
+    {
+      "id": "vietnambiz_0930",
+      "name": "VietnamBiz - Vietcombank rates surveyed at 09:30 on 2026-08-06",
+      "url": "https://vietnambiz.vn/ty-gia-vietcombank-hom-nay-68-dieu-chinh-trai-chieu-usd-sut-giam-nhe-2026861099371.htm",
+      "notes": "Full table for 20 currencies with cash buy, transfer buy and sell."
+    },
+    {
+      "id": "baoquocte_0800",
+      "name": "Báo Thế giới & Việt Nam - 08:00 snapshot",
+      "url": "https://baoquocte.vn/ty-gia-ngoai-te-ty-gia-usd-vnd-hom-nay-6-8-dong-usd-gan-cham-day-trong-vong-6-tuan-427713.html",
+      "notes": "Quotes Vietcombank USD cash-buy/sell at 08:00."
+    },
+    {
+      "id": "baocongthuong_0900",
+      "name": "Báo Công Thương via Vietnam.vn - 09:00 snapshot",
+      "url": "https://www.vietnam.vn/ty-gia-usd-hom-nay-6-8-2026-ty-gia-trung-tam-tang-hon-50-dong",
+      "notes": "Quotes Vietcombank USD cash-buy/sell at 09:00."
+    },
+    {
+      "id": "investing_vietstock_1031",
+      "name": "Investing.com/Vietstock - published 10:31",
+      "url": "https://vn.investing.com/news/commodities-news/gia-vang-trong-nuoc-tiep-tuc-tang-sjc-len-nguong-1433-trieu-dong-moi-luong-2683761",
+      "notes": "At publication, quotes Vietcombank USD cash-buy/sell."
+    },
+    {
+      "id": "webgia_063007",
+      "name": "Webgia historical Vietcombank page - 06:30:07",
+      "url": "https://webgia.com/ty-gia/vietcombank/06-08-2026.html",
+      "notes": "Search-indexed historical snapshot gave timestamp 06:30:07 and full values for at least USD and EUR. The current page is dynamically rendered, so only values that were visible in indexed snippets are included."
+    },
+    {
+      "id": "webgia_140659",
+      "name": "Webgia indexed sidebar/snapshot - 14:06:59",
+      "url": "https://webgia.com/ty-gia/vietcombank/",
+      "notes": "Secondary indexed snapshot containing cash-buy/sell values for several VCB currencies; no transfer-buy values were visible."
+    },
+    {
+      "id": "vcb_official_page",
+      "name": "Vietcombank official exchange-rate page",
+      "url": "https://www.vietcombank.com.vn/vi-VN/KHCN/Cong-cu-Tien-ich/Ty-gia",
+      "notes": "Official source for current/date-selected rates. Public interface does not provide a complete list of all intraday changes."
+    },
+    {
+      "id": "vcb_official_dctc_1352",
+      "name": "Vietcombank official DCTC exchange-rate page - indexed 13:52 snapshot",
+      "url": "https://www.vietcombank.com.vn/vi-VN/To-chuc/Trang-chu-DCTC/KHTC---Ti-gia---DCTC",
+      "notes": "Search-indexed official Vietcombank result showed 'Tỷ giá được cập nhật lúc 13:52 ngày 06/08/2026'. A separate indexed result for the same official page exposed USD cash buy 26,010.00, transfer buy 26,040.00 and sell 26,420.00."
+    }
+  ],
+  "raw_observed_snapshots": [
+    {
+      "timestamp": "2026-08-06T06:00:00+07:00",
+      "status": "observed",
+      "source_ids": [
+        "congcutaichinh_vcb_api_snapshots"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26050.0,
+          "transfer_buy": null,
+          "sell": 26460.0
+        },
+        "AUD": {
+          "cash_buy": 18031.0,
+          "transfer_buy": null,
+          "sell": 18796.0
+        }
+      },
+      "notes": "Buy/sell rounded as shown by the snapshot source; transfer-buy not published there."
+    },
+    {
+      "timestamp": "2026-08-06T06:30:07+07:00",
+      "status": "observed",
+      "source_ids": [
+        "webgia_063007"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26050.0,
+          "transfer_buy": 26080.0,
+          "sell": 26460.0
+        },
+        "EUR": {
+          "cash_buy": 29516.69,
+          "transfer_buy": 29814.84,
+          "sell": 31072.87
+        }
+      },
+      "notes": "Only currencies whose three values were visible in indexed historical snippets are included."
+    },
+    {
+      "timestamp": "2026-08-06T08:00:00+07:00",
+      "status": "partial_observed",
+      "source_ids": [
+        "baoquocte_0800"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26050.0,
+          "transfer_buy": null,
+          "sell": 26460.0
+        }
+      },
+      "notes": "Article explicitly says rates were recorded at 08:00; transfer-buy was not stated."
+    },
+    {
+      "timestamp": "2026-08-06T09:00:00+07:00",
+      "status": "partial_observed",
+      "source_ids": [
+        "baocongthuong_0900"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26040.0,
+          "transfer_buy": null,
+          "sell": 26450.0
+        }
+      },
+      "notes": "Article explicitly says survey time 09:00; transfer-buy was not stated."
+    },
+    {
+      "timestamp": "2026-08-06T09:30:00+07:00",
+      "status": "observed",
+      "source_ids": [
+        "vietnambiz_0930"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26040.0,
+          "transfer_buy": 26070.0,
+          "sell": 26450.0
+        },
+        "EUR": {
+          "cash_buy": 29566.86,
+          "transfer_buy": 29865.52,
+          "sell": 31125.7
+        },
+        "GBP": {
+          "cash_buy": 34459.27,
+          "transfer_buy": 34807.35,
+          "sell": 35922.15
+        },
+        "JPY": {
+          "cash_buy": 160.73,
+          "transfer_buy": 162.35,
+          "sell": 171.82
+        },
+        "AUD": {
+          "cash_buy": 18057.41,
+          "transfer_buy": 18239.8,
+          "sell": 18823.98
+        },
+        "SGD": {
+          "cash_buy": 19969.15,
+          "transfer_buy": 20170.86,
+          "sell": 20858.57
+        },
+        "THB": {
+          "cash_buy": 700.54,
+          "transfer_buy": 778.38,
+          "sell": 811.39
+        },
+        "CAD": {
+          "cash_buy": 18272.07,
+          "transfer_buy": 18456.64,
+          "sell": 19047.76
+        },
+        "CHF": {
+          "cash_buy": 31734.28,
+          "transfer_buy": 32054.83,
+          "sell": 33081.47
+        },
+        "HKD": {
+          "cash_buy": 3253.47,
+          "transfer_buy": 3286.33,
+          "sell": 3412.0
+        },
+        "CNY": {
+          "cash_buy": 3791.83,
+          "transfer_buy": 3830.13,
+          "sell": 3952.8
+        },
+        "DKK": {
+          "cash_buy": null,
+          "transfer_buy": 3985.1,
+          "sell": 4137.49
+        },
+        "INR": {
+          "cash_buy": null,
+          "transfer_buy": 274.52,
+          "sell": 286.33
+        },
+        "KRW": {
+          "cash_buy": 15.99,
+          "transfer_buy": 17.77,
+          "sell": 19.28
+        },
+        "KWD": {
+          "cash_buy": null,
+          "transfer_buy": 85047.08,
+          "sell": 89169.38
+        },
+        "MYR": {
+          "cash_buy": null,
+          "transfer_buy": 6355.23,
+          "sell": 6493.51
+        },
+        "NOK": {
+          "cash_buy": null,
+          "transfer_buy": 2699.85,
+          "sell": 2814.33
+        },
+        "RUB": {
+          "cash_buy": null,
+          "transfer_buy": 308.64,
+          "sell": 341.64
+        },
+        "SAR": {
+          "cash_buy": null,
+          "transfer_buy": 6952.32,
+          "sell": 7251.54
+        },
+        "SEK": {
+          "cash_buy": null,
+          "transfer_buy": 2712.86,
+          "sell": 2827.89
+        }
+      },
+      "notes": "Most complete intraday table found: 20 currencies, surveyed at 09:30."
+    },
+    {
+      "timestamp": "2026-08-06T10:31:00+07:00",
+      "status": "partial_observed",
+      "source_ids": [
+        "investing_vietstock_1031"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26040.0,
+          "transfer_buy": null,
+          "sell": 26450.0
+        }
+      },
+      "notes": "Article publication time is 10:31 and states Vietcombank was 'currently' at this level; treat as corroboration around 10:31 rather than an official VCB event timestamp."
+    },
+    {
+      "timestamp": "2026-08-06T12:00:00+07:00",
+      "status": "observed",
+      "source_ids": [
+        "congcutaichinh_vcb_api_snapshots"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26040.0,
+          "transfer_buy": null,
+          "sell": 26450.0
+        },
+        "AUD": {
+          "cash_buy": 18057.0,
+          "transfer_buy": null,
+          "sell": 18824.0
+        }
+      },
+      "notes": "Scheduled Vietcombank-API-derived snapshot; transfer-buy not published by this source."
+    },
+    {
+      "timestamp": "2026-08-06T13:52:00+07:00",
+      "status": "official_indexed_snapshot",
+      "source_ids": [
+        "vcb_official_dctc_1352"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26010.0,
+          "transfer_buy": 26040.0,
+          "sell": 26420.0
+        }
+      },
+      "notes": "Timestamp and USD three-column values were exposed in search-indexed results from Vietcombank's official DCTC exchange-rate page. The live page later moved to a newer date, so this historical state is preserved as an indexed official snapshot."
+    },
+    {
+      "timestamp": "2026-08-06T14:06:59+07:00",
+      "status": "partial_observed",
+      "source_ids": [
+        "webgia_140659"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26010.0,
+          "transfer_buy": null,
+          "sell": 26420.0
+        },
+        "EUR": {
+          "cash_buy": 29510.05,
+          "transfer_buy": null,
+          "sell": 31065.96
+        },
+        "GBP": {
+          "cash_buy": 34396.87,
+          "transfer_buy": null,
+          "sell": 35857.16
+        },
+        "JPY": {
+          "cash_buy": 160.42,
+          "transfer_buy": null,
+          "sell": 171.49
+        },
+        "KRW": {
+          "cash_buy": 15.93,
+          "transfer_buy": null,
+          "sell": 19.2
+        }
+      },
+      "notes": "Indexed Webgia snapshot; only cash-buy/sell fields visible."
+    },
+    {
+      "timestamp": "2026-08-06T18:00:00+07:00",
+      "status": "observed",
+      "source_ids": [
+        "congcutaichinh_vcb_api_snapshots"
+      ],
+      "rates": {
+        "USD": {
+          "cash_buy": 26010.0,
+          "transfer_buy": 26040.0,
+          "sell": 26420.0
+        },
+        "AUD": {
+          "cash_buy": 17998.0,
+          "transfer_buy": null,
+          "sell": 18763.0
+        }
+      },
+      "notes": "USD cash-buy/sell and AUD cash-buy/sell are from the scheduled VCB-API-derived snapshot. USD transfer-buy 26,040 is cross-checked against end-of-day historical reporting."
+    }
+  ],
+  "usd_vnd_observed_change_levels": [
+    {
+      "from": "2026-08-06T06:00:00+07:00",
+      "confirmed_through": "2026-08-06T08:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "evidence": "06:00 buy/sell; 06:30:07 full 3-column snapshot; 08:00 buy/sell."
+    },
+    {
+      "from_no_later_than": "2026-08-06T09:00:00+07:00",
+      "confirmed_through": "2026-08-06T12:00:00+07:00",
+      "cash_buy": 26040.0,
+      "transfer_buy": 26070.0,
+      "sell": 26450.0,
+      "evidence": "09:00 buy/sell; 09:30 full table; 10:31 buy/sell; 12:00 buy/sell."
+    },
+    {
+      "from_no_later_than": "2026-08-06T13:52:00+07:00",
+      "confirmed_through": "2026-08-06T18:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "evidence": "13:52 full USD indexed/corroborated; 14:06:59 buy/sell; 18:00 buy/sell."
+    }
+  ],
+  "usd_vnd_hourly_reconstruction": [
+    {
+      "timestamp": "2026-08-06T00:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T01:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T02:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T03:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T04:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T05:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T06:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "observed_or_directly_bracketed",
+      "confidence": "high",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T07:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T08:00:00+07:00",
+      "cash_buy": 26050.0,
+      "transfer_buy": 26080.0,
+      "sell": 26460.0,
+      "status": "observed_or_directly_bracketed",
+      "confidence": "high",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T09:00:00+07:00",
+      "cash_buy": 26040.0,
+      "transfer_buy": 26070.0,
+      "sell": 26450.0,
+      "status": "observed_or_directly_bracketed",
+      "confidence": "high",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T10:00:00+07:00",
+      "cash_buy": 26040.0,
+      "transfer_buy": 26070.0,
+      "sell": 26450.0,
+      "status": "reconstructed_locf",
+      "confidence": "high",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T11:00:00+07:00",
+      "cash_buy": 26040.0,
+      "transfer_buy": 26070.0,
+      "sell": 26450.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T12:00:00+07:00",
+      "cash_buy": 26040.0,
+      "transfer_buy": 26070.0,
+      "sell": 26450.0,
+      "status": "observed_or_directly_bracketed",
+      "confidence": "high",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T13:00:00+07:00",
+      "cash_buy": 26040.0,
+      "transfer_buy": 26070.0,
+      "sell": 26450.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T14:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "high",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T15:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T16:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T17:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T18:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "high",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T19:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T20:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T21:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T22:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    },
+    {
+      "timestamp": "2026-08-06T23:00:00+07:00",
+      "cash_buy": 26010.0,
+      "transfer_buy": 26040.0,
+      "sell": 26420.0,
+      "status": "reconstructed_locf",
+      "confidence": "medium",
+      "warning": "Hourly row is a reconstruction for convenience, not proof that Vietcombank published a new quote exactly at this hour."
+    }
+  ],
+  "morning_00_11_59_best_estimate": {
+    "requested_window": "2026-08-06 00:00:00 to 11:59:59 Asia/Ho_Chi_Minh",
+    "hourly_rows": [
+      {
+        "timestamp": "2026-08-06T00:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T01:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T02:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T03:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T04:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T05:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T06:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": true,
+        "method": "observed exact/near-exact public snapshot"
+      },
+      {
+        "timestamp": "2026-08-06T07:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T08:00:00+07:00",
+        "cash_buy": 26050.0,
+        "transfer_buy": 26080.0,
+        "sell": 26460.0,
+        "is_direct_snapshot_at_exact_hour": true,
+        "method": "observed exact/near-exact public snapshot"
+      },
+      {
+        "timestamp": "2026-08-06T09:00:00+07:00",
+        "cash_buy": 26040.0,
+        "transfer_buy": 26070.0,
+        "sell": 26450.0,
+        "is_direct_snapshot_at_exact_hour": true,
+        "method": "observed exact/near-exact public snapshot"
+      },
+      {
+        "timestamp": "2026-08-06T10:00:00+07:00",
+        "cash_buy": 26040.0,
+        "transfer_buy": 26070.0,
+        "sell": 26450.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      },
+      {
+        "timestamp": "2026-08-06T11:00:00+07:00",
+        "cash_buy": 26040.0,
+        "transfer_buy": 26070.0,
+        "sell": 26450.0,
+        "is_direct_snapshot_at_exact_hour": false,
+        "method": "reconstructed from surrounding observed price levels (LOCF)"
+      }
+    ],
+    "extra_observed_points": [
+      "2026-08-06T06:30:07+07:00",
+      "2026-08-06T09:30:00+07:00",
+      "2026-08-06T10:31:00+07:00"
+    ]
+  },
+  "validation_notes": [
+    "Do not treat usd_vnd_hourly_reconstruction as raw tick data.",
+    "The most reliable complete multi-currency snapshot found for the day is 09:30.",
+    "The 06:00/12:00/18:00 records come from a site that explicitly says it stores snapshots from Vietcombank's exchangerates API on that schedule.",
+    "Secondary news sources were used only when they stated a survey/publication time and explicitly quoted Vietcombank.",
+    "No public source found during this check exposed every Vietcombank intraday update event for 2026-08-06.",
+    "The exact transition time between the 08:00 and 09:00 USD levels is unknown; it occurred sometime after the 08:00 observation and by 09:00.",
+    "The exact transition time between the 12:00 and 13:52 USD levels is unknown; it occurred sometime after the 12:00 observation and by 13:52.",
+    "Hours after 18:00 are reconstructed from the last observed 18:00 level; a later overnight change before 07/08 06:00 cannot be ruled out."
+  ]
+}

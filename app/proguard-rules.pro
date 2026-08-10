@@ -1,0 +1,3 @@
+-keepattributes *Annotation*
+-keep class vn.phs.iptv.data.remote.dto.** { *; }
+-keepclassmembers class vn.phs.iptv.data.remote.dto.** { *; }

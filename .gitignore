@@ -1,0 +1,44 @@
+# Gradle
+.gradle/
+/build/
+app/build/
+**/build/
+
+# Local machine config — mỗi máy tự tạo lại từ local.properties.example
+local.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Kotlin build cache
+.kotlin/
+
+# JVM crash dumps
+hs_err_pid*.log
+replay_pid*.log
+
+# Artifacts (không commit, CI tự build)
+*.apk
+*.aab
+*.ap_
+
+# Secrets — NEVER commit
+*.keystore
+*.jks
+# google-services.json  ← uncommit this line once you have the file; store via CI secret
+
+# Proguard generated
+proguard/
+.gitnexus
+
+# Exchange-rate collector runtime state/logs
+data/exchange-rates/runtime/
+
+# Python collector caches
+__pycache__/
+*.py[cod]

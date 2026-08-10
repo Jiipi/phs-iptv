@@ -1,0 +1,9 @@
+# Copy file này thành local.properties và điền đường dẫn Android SDK của máy bạn.
+# File local.properties bị gitignore — không commit.
+
+# Windows example:
+# sdk.dir=C\:\\Users\\YourName\\AppData\\Local\\Android\\Sdk
+
+# Ubuntu / macOS example:
+# sdk.dir=/home/yourname/Android/Sdk
+# sdk.dir=/Users/yourname/Library/Android/sdk

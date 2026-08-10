@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PHS TV</string>
+
+    <!-- Provisioning (F0) — auto-register + console assign model (PRD §10.1 v0.4) -->
+    <string name="provisioning_headline">Kết nối thiết bị</string>
+    <string name="provisioning_device_code_label">Mã thiết bị:</string>
+    <string name="provisioning_instruction">Vào PHS console và gán phòng cho mã này</string>
+    <string name="provisioning_waiting">Đang chờ gán phòng…</string>
+    <string name="provisioning_registering">Đang kết nối…</string>
+    <string name="provisioning_refresh">Làm mới</string>
+    <string name="provisioning_success">Thiết bị đã kết nối</string>
+    <string name="provisioning_error">Kết nối thất bại, vui lòng thử lại</string>
+    <string name="provisioning_debug_skip">Debug: Bỏ qua</string>
+
+    <!-- Idle (F0) -->
+    <string name="idle_hotel_name">PHS Hotel</string>
+    <string name="idle_offline_badge">Ngoại tuyến</string>
+    <string name="idle_debug_checkin">Debug: Giả lập Check-in</string>
+
+    <!-- Welcome (F1) -->
+    <string name="welcome_greeting">Chào mừng</string>
+    <string name="welcome_room">Phòng</string>
+    <string name="welcome_birthday">Chúc mừng sinh nhật</string>
+    <string name="welcome_skip">Bỏ qua</string>
+
+    <!-- Intro Video (F2) -->
+    <string name="video_skip_hint">Bấm Back hoặc OK để bỏ qua</string>
+
+    <!-- Home (hub) -->
+    <string name="home_greeting">Chào mừng,</string>
+    <string name="home_card_voice">Trợ lý</string>
+    <string name="home_card_folio">Hóa đơn</string>
+    <string name="home_coming_soon">Sắp ra mắt</string>
+
+    <!-- Voice Assistant (F3) -->
+    <string name="voice_idle_hint">Bấm để hỏi</string>
+    <string name="voice_listening">Đang nghe…</string>
+    <string name="voice_thinking">Đang suy nghĩ…</string>
+    <string name="voice_speaking">Đang trả lời…</string>
+    <string name="voice_error">Không nhận được giọng nói</string>
+</resources>
