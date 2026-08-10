@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ReceiptLong
 import androidx.compose.material.icons.rounded.RestaurantMenu
@@ -32,9 +33,12 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Border
 import androidx.tv.material3.ClickableSurfaceDefaults
@@ -42,6 +46,7 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
+import androidx.tv.material3.SurfaceDefaults
 import androidx.tv.material3.Text
 import vn.phs.iptv.ui.theme.Dim
 import vn.phs.iptv.ui.theme.GlassRadiusLg
@@ -49,28 +54,24 @@ import vn.phs.iptv.ui.theme.Gold
 import vn.phs.iptv.ui.theme.GoldBright
 import vn.phs.iptv.ui.theme.PhsAppTheme
 import vn.phs.iptv.ui.theme.TextPrimary
+import vn.phs.iptv.ui.theme.TextSecondary
 import vn.phs.iptv.ui.theme.glassSurface
 import vn.phs.iptv.ui.theme.tvFocusRing
-import vn.phs.iptv.ui.theme.TextSecondary
 
-/** One always-visible destination on the Home hub. [subtitle] is the live detail
- *  (folio total, "scan to order", …) that lets the guest read the value without opening it. */
+/** One live widget card on the Home arrival hub. */
 data class HomeAction(
     val id: String,
     val icon: ImageVector,
     val title: String,
     val subtitle: String?,
+    val badge: String? = null,
+    val highlightValue: String? = null,
     val onClick: () -> Unit,
 )
 
 /**
- * The row of function tiles under the arrival card. Guests do not hunt through menus with a
- * remote, so every destination is spelled out here — icon + label + live detail, no hover, no
- * expansion, nothing hidden behind a scroll. A fixed [Row] of equal-weight tiles (never a
- * LazyRow) so the count on screen always equals the count that exists.
- *
- * Focus wiring: the first tile carries [firstFocus] (the screen's initial focus) and redirects
- * D-pad LEFT to [railFocus] so the quick-access rail stays reachable.
+ * The row of live status widgets under the arrival card. Displays live hotel metrics and status
+ * (folio total, Wi-Fi info, room service status) as rich widgets rather than duplicate buttons.
  */
 @Composable
 fun HomeActionRow(
@@ -111,8 +112,7 @@ fun HomeActionRow(
 private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
     var focused by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(GlassRadiusLg)
-    // No shadow on focus: design.md reserves the one drop-shadow for photography, so a
-    // focused tile lifts by brightening its glass instead.
+
     Surface(
         onClick = action.onClick,
         shape = ClickableSurfaceDefaults.shape(shape),
@@ -131,32 +131,70 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
             .onFocusChanged { focused = it.isFocused },
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 22.dp, vertical = 18.dp),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Icon(
-                action.icon,
-                contentDescription = null,
-                tint = if (focused) GoldBright else Gold,
-                modifier = Modifier.size(28.dp),
-            )
-            Spacer(Modifier.height(10.dp))
-            Text(
-                action.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = TextPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            if (action.subtitle != null) {
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    action.subtitle,
-                    style = MaterialTheme.typography.titleSmall,
-                    color = TextSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        action.icon,
+                        contentDescription = null,
+                        tint = if (focused) GoldBright else Gold,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        text = action.title.uppercase(),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = TextUnit(1.5f, TextUnitType.Sp),
+                        ),
+                        color = if (focused) GoldBright else Gold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                if (action.badge != null) {
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        colors = SurfaceDefaults.colors(
+                            containerColor = Gold.copy(alpha = 0.20f),
+                            contentColor = GoldBright,
+                        ),
+                    ) {
+                        Text(
+                            text = action.badge,
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+                        )
+                    }
+                }
+            }
+
+            Column {
+                if (action.highlightValue != null) {
+                    Text(
+                        text = action.highlightValue,
+                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                        color = TextPrimary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Spacer(Modifier.height(2.dp))
+                }
+                if (action.subtitle != null) {
+                    Text(
+                        text = action.subtitle,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = TextSecondary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
         }
     }

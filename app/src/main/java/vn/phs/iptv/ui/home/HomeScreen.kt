@@ -341,25 +341,62 @@ private fun homeActions(
     val hasQr = !screenData?.qrUrl.isNullOrBlank()
     val firstService = contentData?.services.orEmpty()
         .firstNotNullOfOrNull { it.title.forLang(language).takeIf { title -> title.isNotBlank() } }
+    val roomNo = screenData?.roomNo ?: "114"
+    val folioTotal = screenData?.folio?.total?.toVnd() ?: "800.000 ₫"
+
     return buildList {
         if (hasQr) {
             val (title, _) = s.tile("service", s.orderTitle, s.scanToOrder)
-            add(HomeAction("service", Icons.Rounded.RestaurantMenu, title, s.scanToOrder, onService))
+            add(
+                HomeAction(
+                    id = "service",
+                    icon = Icons.Rounded.RestaurantMenu,
+                    title = title,
+                    subtitle = s.scanToOrder,
+                    badge = "24/7",
+                    highlightValue = s.orderTitle,
+                    onClick = onService,
+                ),
+            )
         }
         val (billTitle, billSub) = s.tile("bill", s.billTitle, "")
         add(
             HomeAction(
-                "bill", Icons.Rounded.ReceiptLong, billTitle,
-                screenData?.folio?.total?.toVnd() ?: billSub.takeIf { it.isNotBlank() },
-                onBill,
+                id = "bill",
+                icon = Icons.Rounded.ReceiptLong,
+                title = billTitle,
+                subtitle = billSub.takeIf { it.isNotBlank() } ?: "Tạm tính lưu trú",
+                badge = "TẠM TÍNH",
+                highlightValue = folioTotal,
+                onClick = onBill,
             ),
         )
         if (firstService != null) {
             val (title, _) = s.tile("services", s.servicesTitle, "")
-            add(HomeAction("services", Icons.Rounded.RoomService, title, firstService, onServices))
+            add(
+                HomeAction(
+                    id = "services",
+                    icon = Icons.Rounded.RoomService,
+                    title = title,
+                    subtitle = firstService,
+                    badge = "5 SAO",
+                    highlightValue = "Spa · Hồ bơi · Gym",
+                    onClick = onServices,
+                ),
+            )
         }
         val (helpTitle, helpSub) = s.tile("help", s.helpTitle, s.hotelInfo)
-        add(HomeAction("help", Icons.Rounded.Info, helpTitle, helpSub.takeIf { it.isNotBlank() }, onHelp))
+        add(
+            HomeAction(
+                id = "help",
+                icon = Icons.Rounded.Info,
+                title = helpTitle,
+                subtitle = helpSub.takeIf { it.isNotBlank() } ?: "Thông tin phòng & hỗ trợ",
+                badge = "FREE",
+                highlightValue = "Wi-Fi: Phòng $roomNo",
+                onClick = onHelp,
+            ),
+        )
     }
 }
 
