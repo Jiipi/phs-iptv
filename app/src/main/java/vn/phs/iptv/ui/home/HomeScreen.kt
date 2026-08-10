@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,10 +44,11 @@ import vn.phs.iptv.data.remote.dto.ContentResponse
 import vn.phs.iptv.data.remote.dto.ScreenResponse
 import vn.phs.iptv.domain.AppLanguage
 import vn.phs.iptv.domain.GuestProfile
+import vn.phs.iptv.ui.apps.TvAppCatalog
+import vn.phs.iptv.ui.apps.TvAppShelf
 import vn.phs.iptv.ui.common.toVnd
 import vn.phs.iptv.ui.demo.Demo
 import vn.phs.iptv.ui.demo.Img
-import vn.phs.iptv.ui.demo.Media
 import vn.phs.iptv.ui.content.asContentTile
 import vn.phs.iptv.ui.content.firstMediaUrl
 import vn.phs.iptv.ui.content.forLang
@@ -105,9 +107,11 @@ private fun HomeContent(
     language: AppLanguage,
 ) {
     val s = LocalUiStrings.current
+    val context = LocalContext.current
     val firstTile = remember { FocusRequester() }
     val railFirst = remember { FocusRequester() }
     LaunchedEffect(Unit) { firstTile.requestFocus() }
+    val installedTvApps = remember(context) { TvAppCatalog.installed(context) }
 
     val defaultBackdrop = contentData?.roomType?.media?.firstMediaUrl()
         ?: contentData?.hotel?.media?.firstMediaUrl()
@@ -146,16 +150,6 @@ private fun HomeContent(
         listOf(guest.title, guest.name).filter { it.isNotBlank() }.joinToString(" ")
     }
 
-    // Shelf data (mapped to the shared ShelfItem model so every row lays out identically)
-    val cont = Demo.continueWatching.toShelf(onLiveTv)
-    val movies = Demo.movies.toShelf(onLiveTv)
-    val series = Demo.series.toShelf(onLiveTv)
-    val sports = Demo.sports.toShelf(onLiveTv)
-    val relax = Demo.relax.toShelf(onLiveTv)
-    val docu = Demo.documentary.toShelf(onLiveTv)
-    val channels = Demo.channels.map {
-        ShelfItem(it.number, "${it.number}  ${it.name}", it.nowPlaying, it.imageUrl, it.accent, badge = "LIVE", onClick = onLiveTv)
-    }
     val fallbackServices = Demo.homeTiles.filter { BuildConfig.DEBUG || it.id == "bill" }.map { t ->
         val (title, subtitle) = s.tile(t.id, t.title, t.subtitle)
         t.id to ShelfItem(
@@ -218,9 +212,7 @@ private fun HomeContent(
         add(NavRailItem("services", Icons.Rounded.RoomService, s.navServices, onServices))
         add(NavRailItem("bill", Icons.Rounded.ReceiptLong, s.navBill, onBill))
         add(NavRailItem("help", Icons.Rounded.Info, s.navHelp, onHelp))
-        if (BuildConfig.DEBUG) {
-            add(NavRailItem("assistant", Icons.Rounded.Mic, s.navAssistant, onVoice))
-        }
+        add(NavRailItem("assistant", Icons.Rounded.Mic, s.navAssistant, onVoice))
         add(NavRailItem("language", Icons.Rounded.Language, s.navLanguage, onLanguage))
     }
 
@@ -300,17 +292,17 @@ private fun HomeContent(
                 }
             }
 
-            if (BuildConfig.DEBUG) {
-                shelf(s.continueWatching, 2, cont, portrait = false, setBackdrop)
-                shelf(s.movies, 3, movies, portrait = true, setBackdrop)
-                shelf(s.series, 4, series, portrait = true, setBackdrop)
-                shelf(s.sports, 5, sports, portrait = false, setBackdrop)
-                shelf(s.relax, 6, relax, portrait = false, setBackdrop)
-                shelf(s.documentary, 7, docu, portrait = false, setBackdrop)
-                shelf(s.liveTv, 8, channels, portrait = false, setBackdrop)
+            if (installedTvApps.isNotEmpty()) {
+                item(key = "tv_apps") {
+                    TvAppShelf(
+                        apps = installedTvApps,
+                        language = language,
+                        onLaunch = { app -> TvAppCatalog.launch(context, app.packageName) },
+                    )
+                }
             }
             if (leftoverTiles.isNotEmpty()) {
-                shelf(s.yourStay, 9, leftoverTiles, portrait = false, setBackdrop)
+                shelf(s.yourStay, 2, leftoverTiles, portrait = false, setBackdrop)
             }
         }
         }
@@ -432,10 +424,6 @@ private fun androidx.compose.foundation.lazy.LazyListScope.shelf(
             onItemFocused = onItemFocused,
         )
     }
-}
-
-private fun List<Media>.toShelf(onClick: () -> Unit) = map {
-    ShelfItem(it.id, it.title, it.subtitle, it.imageUrl, it.accent, it.badge, it.progress, onClick = onClick)
 }
 
 /** Artwork for PMS tile keys that have no matching entry in `Demo.homeTiles`. */

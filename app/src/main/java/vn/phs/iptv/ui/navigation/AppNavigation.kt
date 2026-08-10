@@ -168,7 +168,11 @@ fun AppNavigation(stateMachine: AppStateMachine) {
         }
 
         composable(Routes.VOICE) {
-            VoiceAssistantScreen(onBack = { stateMachine.navigateTo(AppScreen.Home) })
+            VoiceAssistantScreen(
+                onBack = { stateMachine.navigateTo(AppScreen.Home) },
+                language = language,
+                onNavigate = { destination -> stateMachine.navigateTo(destination) },
+            )
         }
 
         composable(Routes.HELP) {

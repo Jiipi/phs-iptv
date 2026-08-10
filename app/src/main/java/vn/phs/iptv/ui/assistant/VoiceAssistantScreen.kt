@@ -2,12 +2,18 @@
 
 package vn.phs.iptv.ui.assistant
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -54,6 +60,9 @@ import androidx.tv.material3.Text
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import vn.phs.iptv.domain.AppLanguage
+import vn.phs.iptv.domain.AppScreen
+import vn.phs.iptv.ui.apps.TvAppCatalog
 import vn.phs.iptv.ui.demo.Demo
 import vn.phs.iptv.ui.theme.AppleBackButton
 import vn.phs.iptv.ui.theme.ActionBlue
@@ -70,6 +79,8 @@ import java.util.Locale
 @Composable
 fun VoiceAssistantScreen(
     onBack: () -> Unit,
+    language: AppLanguage = AppLanguage.VI,
+    onNavigate: (AppScreen) -> Unit = {},
     viewModel: VoiceAssistantViewModel = hiltViewModel(),
 ) {
     BackHandler { onBack() }
@@ -77,19 +88,34 @@ fun VoiceAssistantScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val micFocus = remember { FocusRequester() }
+    val speechAvailable = remember(context) { SpeechRecognizer.isRecognitionAvailable(context) }
+    val speechLocale = remember(language) {
+        Locale.forLanguageTag(
+            when (language) {
+                AppLanguage.VI -> "vi-VN"
+                AppLanguage.EN -> "en-US"
+                AppLanguage.RU -> "ru-RU"
+            },
+        )
+    }
+    val micPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) viewModel.startListening() else viewModel.onPermissionDenied()
+    }
 
     var tts by remember { mutableStateOf<TextToSpeech?>(null) }
-    DisposableEffect(context) {
+    DisposableEffect(context, speechLocale) {
         val instance = TextToSpeech(context) { status ->
-            if (status == TextToSpeech.SUCCESS) tts?.language = Locale("vi", "VN")
+            if (status == TextToSpeech.SUCCESS) tts?.language = speechLocale
         }
         tts = instance
         onDispose { instance.stop(); instance.shutdown() }
     }
 
-    val recognizer = remember { SpeechRecognizer.createSpeechRecognizer(context) }
-    DisposableEffect(recognizer) {
-        recognizer.setRecognitionListener(object : RecognitionListener {
+    val recognizer = remember(context, speechAvailable) {
+        if (speechAvailable) SpeechRecognizer.createSpeechRecognizer(context) else null
+    }
+    DisposableEffect(recognizer, language) {
+        recognizer?.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(p: Bundle?) {}
             override fun onBeginningOfSpeech() {}
             override fun onRmsChanged(rms: Float) {}
@@ -98,32 +124,56 @@ fun VoiceAssistantScreen(
             override fun onError(errorCode: Int) { viewModel.onSpeechError() }
             override fun onResults(results: Bundle?) {
                 val text = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()
-                if (!text.isNullOrBlank()) viewModel.onSpeechResult(text) else viewModel.onSpeechError()
+                if (!text.isNullOrBlank()) viewModel.onSpeechResult(text, language) else viewModel.onSpeechError()
             }
             override fun onPartialResults(p: Bundle?) {}
             override fun onEvent(p: Int, p1: Bundle?) {}
         })
-        onDispose { recognizer.destroy() }
+        onDispose { recognizer?.destroy() }
     }
 
-    LaunchedEffect(uiState) {
+    LaunchedEffect(uiState, recognizer, tts, language) {
         when (val state = uiState) {
             is VoiceUiState.Listening -> {
-                val intent = android.content.Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-                    putExtra(RecognizerIntent.EXTRA_LANGUAGE, "vi-VN")
-                    putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
+                if (recognizer == null) {
+                    viewModel.onRecognitionUnavailable()
+                } else {
+                    val intent = android.content.Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                        putExtra(RecognizerIntent.EXTRA_LANGUAGE, speechLocale.toLanguageTag())
+                        putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
+                    }
+                    try {
+                        recognizer.startListening(intent)
+                    } catch (_: SecurityException) {
+                        viewModel.onPermissionDenied()
+                    }
                 }
-                recognizer.startListening(intent)
             }
             is VoiceUiState.Speaking -> {
+                val completeCommand = {
+                    Handler(Looper.getMainLooper()).post {
+                        when (val action = viewModel.onSpeakingDone()) {
+                            is AssistantAction.Navigate -> onNavigate(action.destination)
+                            is AssistantAction.LaunchApp -> {
+                                if (!TvAppCatalog.launch(context, action.packageName)) {
+                                    viewModel.onActionFailed(action.appName)
+                                }
+                            }
+                            null -> Unit
+                        }
+                    }
+                    Unit
+                }
                 tts?.setOnUtteranceProgressListener(object : android.speech.tts.UtteranceProgressListener() {
                     override fun onStart(utteranceId: String?) {}
-                    override fun onDone(utteranceId: String?) { viewModel.onSpeakingDone() }
+                    override fun onDone(utteranceId: String?) { completeCommand() }
                     @Deprecated("Deprecated in Java")
-                    override fun onError(utteranceId: String?) { viewModel.reset() }
+                    override fun onError(utteranceId: String?) { completeCommand() }
                 })
-                tts?.speak(state.answer, TextToSpeech.QUEUE_FLUSH, null, "phs_tts")
+                if (tts?.speak(state.answer, TextToSpeech.QUEUE_FLUSH, null, "phs_tts") == TextToSpeech.ERROR) {
+                    completeCommand()
+                }
             }
             else -> {}
         }
@@ -131,20 +181,25 @@ fun VoiceAssistantScreen(
 
     LaunchedEffect(Unit) { micFocus.requestFocus() }
 
-    PhsAppTheme {
-        VoiceContent(
-            uiState = uiState,
-            micFocus = micFocus,
-            onBack = onBack,
-            onMicPress = {
-                when (uiState) {
-                    is VoiceUiState.Idle, is VoiceUiState.Error -> viewModel.startListening()
-                    is VoiceUiState.Speaking -> { tts?.stop(); viewModel.reset() }
-                    else -> {}
+    VoiceContent(
+        uiState = uiState,
+        micFocus = micFocus,
+        onBack = onBack,
+        onMicPress = {
+            when (uiState) {
+                is VoiceUiState.Idle, is VoiceUiState.Error -> {
+                    when {
+                        !speechAvailable -> viewModel.onRecognitionUnavailable()
+                        context.checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED ->
+                            viewModel.startListening()
+                        else -> micPermission.launch(Manifest.permission.RECORD_AUDIO)
+                    }
                 }
-            },
-        )
-    }
+                is VoiceUiState.Speaking -> { tts?.stop(); viewModel.reset() }
+                else -> {}
+            }
+        },
+    )
 }
 
 @Composable

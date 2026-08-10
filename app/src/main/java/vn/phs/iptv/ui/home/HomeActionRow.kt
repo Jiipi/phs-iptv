@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -136,40 +138,43 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
             .glassSurface(shape, focused)
             .onFocusChanged { focused = it.isFocused },
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 18.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.Center,
         ) {
-            // Left: icon + title
+            // Line 1: Icon + Accent Category Title
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f, fill = false),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Icon(
                     action.icon,
                     contentDescription = null,
                     tint = accentColor,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(16.dp),
                 )
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(6.dp))
                 Text(
-                    text = action.title,
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = TextPrimary,
+                    text = action.title.uppercase(),
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = TextUnit(1.2f, TextUnitType.Sp),
+                    ),
+                    color = accentColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            // Right: highlight value (e.g. "9.790.000 đ", "24/7", "Wi-Fi · abc")
-            if (action.highlightValue != null) {
-                Spacer(Modifier.width(8.dp))
+            Spacer(Modifier.height(4.dp))
+            // Line 2: Highlight Value or Subtitle
+            val detailText = action.highlightValue?.takeIf { it.isNotBlank() } ?: action.subtitle.orEmpty()
+            if (detailText.isNotBlank()) {
                 Text(
-                    text = action.highlightValue,
-                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = accentColor,
+                    text = detailText,
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                    color = TextPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )

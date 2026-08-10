@@ -15,6 +15,18 @@
         android:name="android.hardware.touchscreen"
         android:required="false" />
 
+    <!-- Curated guest apps shown by the Home launcher. Avoid QUERY_ALL_PACKAGES. -->
+    <queries>
+        <package android:name="com.google.android.youtube.tv" />
+        <package android:name="com.viettel.tv360.tv" />
+        <package android:name="vn.thvli.androidtv" />
+        <package android:name="net.fptplay.ottbox" />
+        <package android:name="com.vieon.tv" />
+        <package android:name="com.netflix.mediaclient" />
+        <package android:name="com.spotify.tv.android" />
+        <package android:name="vng.zing.mp3" />
+    </queries>
+
     <application
         android:name=".PhsIptvApp"
         android:allowBackup="false"
