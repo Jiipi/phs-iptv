@@ -48,10 +48,13 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Surface
 import androidx.tv.material3.SurfaceDefaults
 import androidx.tv.material3.Text
+import vn.phs.iptv.ui.theme.AppThemeMode
 import vn.phs.iptv.ui.theme.Dim
 import vn.phs.iptv.ui.theme.GlassRadiusLg
 import vn.phs.iptv.ui.theme.Gold
 import vn.phs.iptv.ui.theme.GoldBright
+import vn.phs.iptv.ui.theme.GoldDeep
+import vn.phs.iptv.ui.theme.LocalAppThemeMode
 import vn.phs.iptv.ui.theme.PhsAppTheme
 import vn.phs.iptv.ui.theme.TextPrimary
 import vn.phs.iptv.ui.theme.TextSecondary
@@ -147,23 +150,28 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
                         modifier = Modifier.size(18.dp),
                     )
                     Spacer(Modifier.width(6.dp))
+                    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
+                    val titleColor = if (isLight) GoldDeep else (if (focused) GoldBright else Gold)
                     Text(
                         text = action.title.uppercase(),
                         style = MaterialTheme.typography.labelSmall.copy(
                             fontWeight = FontWeight.Bold,
                             letterSpacing = TextUnit(1.5f, TextUnitType.Sp),
                         ),
-                        color = if (focused) GoldBright else Gold,
+                        color = titleColor,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
                 if (action.badge != null) {
+                    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
+                    val badgeBg = if (isLight) GoldDeep.copy(alpha = 0.15f) else Gold.copy(alpha = 0.20f)
+                    val badgeText = if (isLight) GoldDeep else GoldBright
                     Surface(
                         shape = RoundedCornerShape(4.dp),
                         colors = SurfaceDefaults.colors(
-                            containerColor = Gold.copy(alpha = 0.20f),
-                            contentColor = GoldBright,
+                            containerColor = badgeBg,
+                            contentColor = badgeText,
                         ),
                     ) {
                         Text(

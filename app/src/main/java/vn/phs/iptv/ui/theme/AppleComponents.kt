@@ -107,20 +107,22 @@ fun AppleDynamicBackdrop(imageUrl: String?, modifier: Modifier = Modifier) {
         }
         // Darken vertically for legibility + depth. Lighter than it used to be: the
         // backdrop is genuinely soft now, so less scrim is needed to read over it, and
-        // letting more colour through is what the glass panels tint themselves with.
+        // Scrim layer: Dark scrim in Dark Mode, Light Parchment wash in Light Mode.
+        val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
+        val scrimBase = if (isLight) Parchment else TvBackground
         Box(
             Modifier.fillMaxSize().background(
                 Brush.verticalGradient(
-                    0f to TvBackground.copy(alpha = 0.46f),
-                    0.55f to TvBackground.copy(alpha = 0.76f),
-                    1f to TvBackground.copy(alpha = 0.96f),
+                    0f to scrimBase.copy(alpha = if (isLight) 0.88f else 0.46f),
+                    0.55f to scrimBase.copy(alpha = if (isLight) 0.94f else 0.76f),
+                    1f to scrimBase.copy(alpha = if (isLight) 0.98f else 0.96f),
                 ),
             ),
         )
         // Left scrim so the headline column reads cleanly
         Box(
             Modifier.fillMaxSize().background(
-                Brush.horizontalGradient(0f to TvBackground.copy(alpha = 0.5f), 0.65f to Color.Transparent),
+                Brush.horizontalGradient(0f to scrimBase.copy(alpha = if (isLight) 0.60f else 0.5f), 0.65f to Color.Transparent),
             ),
         )
     }

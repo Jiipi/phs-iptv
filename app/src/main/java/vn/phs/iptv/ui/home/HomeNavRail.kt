@@ -48,6 +48,7 @@ import androidx.tv.material3.Text
 import vn.phs.iptv.ui.theme.FocusDurationMs
 import vn.phs.iptv.ui.theme.FocusEasing
 import vn.phs.iptv.ui.theme.GoldBright
+import vn.phs.iptv.ui.theme.GoldDeep
 import vn.phs.iptv.ui.theme.OnGold
 import vn.phs.iptv.ui.theme.GlassRadiusMd
 import vn.phs.iptv.ui.theme.TextSecondary
@@ -89,47 +90,46 @@ fun HomeNavRail(
         tween(FocusDurationMs, easing = FocusEasing), label = "railWidth",
     )
 
-    Column(
-        modifier = modifier
-            .width(width)
-            .fillMaxHeight()
-            .onFocusChanged {
-                if (it.hasFocus != railFocused) {
-                    railFocused = it.hasFocus
-                    onRailFocusChanged(it.hasFocus)
+        val isLight = vn.phs.iptv.ui.theme.LocalAppThemeMode.current == vn.phs.iptv.ui.theme.AppThemeMode.LIGHT
+        val railBase = if (isLight) vn.phs.iptv.ui.theme.Parchment else TvBackground
+        Column(
+            modifier = modifier
+                .width(width)
+                .fillMaxHeight()
+                .onFocusChanged {
+                    if (it.hasFocus != railFocused) {
+                        railFocused = it.hasFocus
+                        onRailFocusChanged(it.hasFocus)
+                    }
                 }
+                .focusGroup()
+                .background(
+                    Brush.horizontalGradient(
+                        0f to railBase.copy(alpha = if (isLight) 0.94f else 0.93f),
+                        0.7f to railBase.copy(alpha = if (isLight) 0.85f else 0.80f),
+                        1f to Color.Transparent,
+                    ),
+                )
+                .background(
+                    Brush.horizontalGradient(
+                        0f to (if (isLight) Color.Black.copy(alpha = 0.04f) else Color.White.copy(alpha = 0.06f)),
+                        0.8f to Color.Transparent,
+                    ),
+                )
+                .padding(start = 4.dp, end = 4.dp, top = 28.dp, bottom = 28.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+        ) {
+            items.forEachIndexed { i, item ->
+                NavRailRow(
+                    item = item,
+                    selected = item.id == selectedId,
+                    expanded = railFocused,
+                    modifier = Modifier
+                        .then(if (i == 0) Modifier.focusRequester(railFocusRequester) else Modifier)
+                        .focusProperties { right = contentFocusRequester },
+                )
             }
-            .focusGroup()
-            .background(
-                // Glass rather than a slab of background colour, but still opaque enough at
-                // the left edge to carry label text: expanded, the rail's words sit directly
-                // over the room photography and vanish without this.
-                Brush.horizontalGradient(
-                    0f to TvBackground.copy(alpha = 0.93f),
-                    0.7f to TvBackground.copy(alpha = 0.80f),
-                    1f to Color.Transparent,
-                ),
-            )
-            .background(
-                Brush.horizontalGradient(
-                    0f to Color.White.copy(alpha = 0.06f),
-                    0.8f to Color.Transparent,
-                ),
-            )
-            .padding(start = 4.dp, end = 4.dp, top = 28.dp, bottom = 28.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-    ) {
-        items.forEachIndexed { i, item ->
-            NavRailRow(
-                item = item,
-                selected = item.id == selectedId,
-                expanded = railFocused,
-                modifier = Modifier
-                    .then(if (i == 0) Modifier.focusRequester(railFocusRequester) else Modifier)
-                    .focusProperties { right = contentFocusRequester },
-            )
         }
-    }
 }
 
 @Composable
@@ -139,21 +139,21 @@ private fun NavRailRow(
     expanded: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val isLight = vn.phs.iptv.ui.theme.LocalAppThemeMode.current == vn.phs.iptv.ui.theme.AppThemeMode.LIGHT
     var focused by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
         if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "railRow",
     )
     val shape = RoundedCornerShape(GlassRadiusMd)
+    val selBg = if (isLight) Color.Black.copy(alpha = 0.08f) else Color.White.copy(alpha = 0.10f)
+    val selContent = if (isLight) GoldDeep else GoldBright
     Surface(
         onClick = item.onSelect,
         shape = ClickableSurfaceDefaults.shape(shape),
         colors = ClickableSurfaceDefaults.colors(
-            // The selected row is glass; the focused row is solid gold. Gold is the accent,
-            // not a surface, so it stays opaque — that contrast is what makes focus obvious
-            // from across a room.
-            containerColor = if (selected) Color.White.copy(alpha = 0.10f) else Color.Transparent,
+            containerColor = if (selected) selBg else Color.Transparent,
             focusedContainerColor = GoldBright,
-            contentColor = if (selected) GoldBright else TextSecondary,
+            contentColor = if (selected) selContent else TextSecondary,
             focusedContentColor = OnGold,
         ),
         scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
