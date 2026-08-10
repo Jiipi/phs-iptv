@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -131,7 +131,7 @@ private fun ServicesContent(
                     )
                 }
             } else {
-                items(services) { service ->
+                itemsIndexed(services) { index, service ->
                     val id = "$index:${service.title.vi}:${service.title.en}"
                     ServiceRow(
                         service = service,

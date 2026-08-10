@@ -62,35 +62,31 @@ fun Modifier.glassSurface(
     focused: Boolean = false,
 ): Modifier {
     val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
-    val targetFill = if (isLight) {
-        if (focused) Color.White.copy(alpha = 0.95f) else Color.White.copy(alpha = 0.70f)
-    } else {
-        if (focused) Color.White.copy(alpha = 0.14f) else Color.White.copy(alpha = 0.07f)
-    }
-    val targetBorder = if (isLight) {
-        if (focused) GoldBright else Color.Black.copy(alpha = 0.08f)
-    } else {
-        if (focused) Color.White.copy(alpha = 0.22f) else Color.White.copy(alpha = 0.12f)
-    }
 
     val fillAlpha by animateFloatAsState(
-        targetValue = if (focused) (if (isLight) 0.95f else 0.14f) else (if (isLight) 0.70f else 0.07f),
+        targetValue = if (focused) (if (isLight) 0.82f else 0.14f) else (if (isLight) 0.62f else 0.07f),
         animationSpec = tween(FocusDurationMs, easing = FocusEasing),
         label = "glassFill",
     )
     val borderAlpha by animateFloatAsState(
-        targetValue = if (focused) (if (isLight) 0.40f else 0.22f) else (if (isLight) 0.08f else 0.12f),
+        targetValue = if (focused) (if (isLight) 0.70f else 0.22f) else (if (isLight) 0.35f else 0.12f),
         animationSpec = tween(FocusDurationMs, easing = FocusEasing),
         label = "glassBorder",
     )
 
-    val baseFillColor = if (isLight) Color.White else Color.White
-    val borderColor = if (isLight && focused) Gold else (if (isLight) Color.Black.copy(alpha = borderAlpha) else Color.White.copy(alpha = borderAlpha))
+    val baseFillColor = Color.White
+    val borderColor = if (focused) Gold else (if (isLight) Color.White.copy(alpha = borderAlpha) else Color.White.copy(alpha = borderAlpha))
+    val glassSheen = if (isLight) {
+        Brush.verticalGradient(
+            0.0f to Color.White.copy(alpha = 0.45f),
+            0.45f to Color.Transparent,
+        )
+    } else GlassSheen
 
     return this
         .clip(shape)
         .background(baseFillColor.copy(alpha = fillAlpha))
-        .background(GlassSheen)
+        .background(glassSheen)
         .border(BorderStroke(1.dp, borderColor), shape)
 }
 
