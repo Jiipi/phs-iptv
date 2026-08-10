@@ -200,16 +200,14 @@ private fun HomeContent(
         .filterNot { (labelKey, _) -> labelKey in ActionTileKeys }
         .map { (_, item) -> item }
 
-    // Quick-access rail destinations (localized). "home" just returns focus to the content.
+    // Primary navigation rail destinations (localized). "home" returns focus to content.
     val railItems = buildList {
         add(NavRailItem("home", Icons.Rounded.Home, s.navHome) { firstTile.requestFocus() })
-        if (BuildConfig.DEBUG) {
-            add(NavRailItem("livetv", Icons.Rounded.LiveTv, s.navLiveTv, onLiveTv))
-            add(NavRailItem("menu", Icons.Rounded.RestaurantMenu, s.navMenu, onService))
-            add(NavRailItem("services", Icons.Rounded.RoomService, s.navServices, onServices))
-        }
-        add(NavRailItem("help", Icons.Rounded.Info, s.navHelp, onHelp))
+        add(NavRailItem("livetv", Icons.Rounded.LiveTv, s.navLiveTv, onLiveTv))
+        add(NavRailItem("menu", Icons.Rounded.RestaurantMenu, s.navMenu, onService))
+        add(NavRailItem("services", Icons.Rounded.RoomService, s.navServices, onServices))
         add(NavRailItem("bill", Icons.Rounded.ReceiptLong, s.navBill, onBill))
+        add(NavRailItem("help", Icons.Rounded.Info, s.navHelp, onHelp))
         if (BuildConfig.DEBUG) {
             add(NavRailItem("assistant", Icons.Rounded.Mic, s.navAssistant, onVoice))
         }
