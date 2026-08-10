@@ -47,7 +47,7 @@
 - [x] Live TV mở với header còn trên màn hình, focus mặc định ở Quay lại và nhãn Việt/Anh/Nga theo lựa chọn.
 - [x] Hotel services luôn có focus an toàn khi loading/empty.
 - [x] `PhsAppTheme` lồng kế thừa `LocalAppThemeMode`; đã test Light trên Home, Live TV debug, Folio, Order, Services và Help.
-- [ ] Tạo component chung `LoadingState / EmptyState / ErrorState` có icon, mô tả ngắn, CTA và focus.
+- [x] Tạo `ContentStateMessage`/`ContentStatePanel` chung cho Folio empty, Services loading/empty và Order unavailable; CTA vẫn giữ focus theo từng màn.
 - [ ] Đưa copy hard-code của Idle, Live badge, Home badge, Voice và Provisioning vào hệ i18n.
 - [x] Format ngày Home theo `AppLanguage` (`vi-VN`, `en-US`, `ru-RU`).
 - [x] Chuẩn hóa guest từ PMS: trim/gộp khoảng trắng, giới hạn 80 ký tự, chặn placeholder và fallback `Guest`.

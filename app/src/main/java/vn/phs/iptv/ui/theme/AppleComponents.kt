@@ -561,7 +561,7 @@ object Dim {
     // under the bottom edge.
     val HeroW = 300.dp        // room-type / intro-film panel beside the stay card
     val ArrivalH = 230.dp     // shared height of that row
-    val ActionTileH = 110.dp  // one action tile
+    val ActionTileH = 64.dp   // compact action tile (icon + title)
 }
 
 /**

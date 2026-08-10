@@ -31,6 +31,7 @@ import androidx.tv.material3.SurfaceDefaults
 import androidx.tv.material3.Text
 import vn.phs.iptv.data.remote.dto.ScreenResponse
 import vn.phs.iptv.domain.GuestProfile
+import vn.phs.iptv.ui.common.ContentStatePanel
 import vn.phs.iptv.ui.common.QrCodeImage
 import vn.phs.iptv.ui.i18n.LocalUiStrings
 import vn.phs.iptv.ui.theme.ApplePillButton
@@ -118,28 +119,11 @@ private fun OrderContent(
                 }
             } else {
                 item {
-                    Surface(
-                        shape = RoundedCornerShape(22.dp),
-                        colors = SurfaceDefaults.colors(containerColor = SurfaceTile1),
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Column(
-                            Modifier.padding(48.dp),
-                            verticalArrangement = Arrangement.spacedBy(18.dp),
-                        ) {
-                            Text(
-                                s.orderUnavailableHeading,
-                                style = MaterialTheme.typography.displaySmall,
-                                color = TextPrimary,
-                            )
-                            Text(
-                                s.orderUnavailableBody,
-                                style = MaterialTheme.typography.titleLarge,
-                                color = TextSecondary,
-                            )
-                            ApplePillButton(text = s.done, onClick = onBack, filled = false)
-                        }
-                    }
+                    ContentStatePanel(
+                        title = s.orderUnavailableHeading,
+                        body = s.orderUnavailableBody,
+                        action = { ApplePillButton(text = s.done, onClick = onBack, filled = false) },
+                    )
                 }
             }
         }

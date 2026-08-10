@@ -53,6 +53,7 @@ import vn.phs.iptv.data.remote.dto.ContentResponse
 import vn.phs.iptv.data.remote.dto.ContentServiceDto
 import vn.phs.iptv.domain.AppLanguage
 import vn.phs.iptv.domain.GuestProfile
+import vn.phs.iptv.ui.common.ContentStatePanel
 import vn.phs.iptv.ui.content.forLang
 import vn.phs.iptv.ui.content.resolvedHours
 import vn.phs.iptv.ui.content.resolvedImageUrl
@@ -111,23 +112,19 @@ private fun ServicesContent(
 
             if (contentData == null) {
                 item {
-                    Text(
-                        localText(language, "Đang tải nội dung khách sạn…", "Loading hotel content…", "Загрузка…"),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = TextSecondary,
+                    ContentStatePanel(
+                        title = localText(language, "Đang tải nội dung khách sạn…", "Loading hotel content…", "Загрузка…"),
                     )
                 }
             } else if (services.isEmpty()) {
                 item {
-                    Text(
-                        localText(
+                    ContentStatePanel(
+                        title = localText(
                             language,
                             "Khách sạn chưa cấu hình dịch vụ trên PMS.",
                             "Hotel services have not been configured in PMS.",
                             "Услуги отеля ещё не настроены.",
                         ),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = TextSecondary,
                     )
                 }
             } else {

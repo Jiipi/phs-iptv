@@ -36,6 +36,7 @@ import androidx.tv.material3.Text
 import vn.phs.iptv.data.remote.dto.ScreenFolioDto
 import vn.phs.iptv.data.remote.dto.ScreenResponse
 import vn.phs.iptv.domain.GuestProfile
+import vn.phs.iptv.ui.common.ContentStateMessage
 import vn.phs.iptv.ui.common.toLocalDateTimeLabel
 import vn.phs.iptv.ui.common.toVnd
 import vn.phs.iptv.ui.i18n.LocalUiStrings
@@ -102,11 +103,7 @@ private fun FolioContent(guest: GuestProfile, screenData: ScreenResponse?, onBac
                 Column(Modifier.padding(horizontal = 36.dp, vertical = 28.dp)) {
                     val rows = screenData?.folio?.toRows(s).orEmpty()
                     if (rows.isEmpty()) {
-                        Text(
-                            s.folioUnavailable,
-                            style = MaterialTheme.typography.titleLarge,
-                            color = TextSecondary,
-                        )
+                        ContentStateMessage(title = s.folioUnavailable)
                     }
                     rows.forEachIndexed { i, row ->
                         FolioLine(row)

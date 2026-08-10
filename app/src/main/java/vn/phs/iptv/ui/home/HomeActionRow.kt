@@ -116,6 +116,7 @@ fun HomeActionRow(
 private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
     var focused by remember { mutableStateOf(false) }
     val shape = RoundedCornerShape(GlassRadiusLg)
+    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
 
     Surface(
         onClick = action.onClick,
@@ -134,77 +135,27 @@ private fun ActionTile(action: HomeAction, modifier: Modifier = Modifier) {
             .glassSurface(shape, focused)
             .onFocusChanged { focused = it.isFocused },
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 14.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        action.icon,
-                        contentDescription = null,
-                        tint = if (focused) GoldBright else Gold,
-                        modifier = Modifier.size(18.dp),
-                    )
-                    Spacer(Modifier.width(6.dp))
-                    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
-                    val titleColor = if (isLight) LightAccent else (if (focused) GoldBright else Gold)
-                    Text(
-                        text = action.title.uppercase(),
-                        style = MaterialTheme.typography.labelSmall.copy(
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = TextUnit(1.5f, TextUnitType.Sp),
-                        ),
-                        color = titleColor,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-                if (action.badge != null) {
-                    val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
-                    val badgeBg = if (isLight) LightAccent.copy(alpha = 0.15f) else Gold.copy(alpha = 0.20f)
-                    val badgeText = if (isLight) LightAccent else GoldBright
-                    Surface(
-                        shape = RoundedCornerShape(4.dp),
-                        colors = SurfaceDefaults.colors(
-                            containerColor = badgeBg,
-                            contentColor = badgeText,
-                        ),
-                    ) {
-                        Text(
-                            text = action.badge,
-                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-                        )
-                    }
-                }
-            }
-
-            Column {
-                if (action.highlightValue != null) {
-                    Text(
-                        text = action.highlightValue,
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                        color = TextPrimary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Spacer(Modifier.height(2.dp))
-                }
-                if (action.subtitle != null) {
-                    Text(
-                        text = action.subtitle,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = TextSecondary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-            }
+            Icon(
+                action.icon,
+                contentDescription = null,
+                tint = if (isLight) LightAccent else (if (focused) GoldBright else Gold),
+                modifier = Modifier.size(22.dp),
+            )
+            Spacer(Modifier.width(10.dp))
+            Text(
+                text = action.title,
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                color = TextPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
