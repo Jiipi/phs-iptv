@@ -47,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.heightIn
 import androidx.tv.material3.Border
 import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
@@ -56,9 +57,13 @@ import androidx.tv.material3.Text
 import vn.phs.iptv.domain.AppLanguage
 import vn.phs.iptv.domain.GuestProfile
 import vn.phs.iptv.ui.theme.AmbientVideoBackground
+import vn.phs.iptv.ui.theme.AppThemeMode
+import vn.phs.iptv.ui.theme.FocusDurationMs
+import vn.phs.iptv.ui.theme.FocusEasing
 import vn.phs.iptv.ui.theme.flagRes
 import vn.phs.iptv.ui.theme.Gold
 import vn.phs.iptv.ui.theme.GoldBright
+import vn.phs.iptv.ui.theme.OnGold
 import vn.phs.iptv.ui.theme.PhsAppTheme
 import vn.phs.iptv.ui.theme.TextPrimary
 import vn.phs.iptv.ui.theme.TextSecondary
@@ -83,14 +88,12 @@ fun LanguageScreen(
     onSelected: (AppLanguage) -> Unit,
     guest: GuestProfile? = null,
     backdropVideoUrl: String? = null,
+    themeMode: AppThemeMode = AppThemeMode.DARK,
+    onToggleTheme: () -> Unit = {},
     onBack: (() -> Unit)? = null,
 ) {
-    // Picking a language is the only way forward, so BACK must not escape. Without this the
-    // event reaches the Activity and, since this app is the launcher, there is nothing behind
-    // it — the same dead-end Home used to have. [onBack] is supplied only when the guest
-    // arrived here voluntarily from the hub and has somewhere to return to.
     BackHandler { onBack?.invoke() }
-    PhsAppTheme { LanguageContent(onSelected, guest, backdropVideoUrl) }
+    PhsAppTheme(themeMode = themeMode) { LanguageContent(onSelected, guest, backdropVideoUrl, themeMode, onToggleTheme) }
 }
 
 @Composable
@@ -98,6 +101,8 @@ private fun LanguageContent(
     onSelected: (AppLanguage) -> Unit,
     guest: GuestProfile?,
     backdropVideoUrl: String?,
+    themeMode: AppThemeMode,
+    onToggleTheme: () -> Unit,
 ) {
     val first = remember { FocusRequester() }
     LaunchedEffect(Unit) { first.requestFocus() }
@@ -202,6 +207,54 @@ private fun LanguageContent(
                         modifier = if (index == 0) Modifier.focusRequester(first) else Modifier,
                     )
                 }
+            }
+
+            Spacer(Modifier.height(22.dp))
+
+            ThemeTogglePill(
+                themeMode = themeMode,
+                onToggleTheme = onToggleTheme,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ThemeTogglePill(
+    themeMode: AppThemeMode,
+    onToggleTheme: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val isLight = themeMode == AppThemeMode.LIGHT
+    var focused by remember { mutableStateOf(false) }
+    val scale by animateFloatAsState(
+        if (focused) 1.06f else 1f, tween(FocusDurationMs, easing = FocusEasing), label = "themePill",
+    )
+    val pillBg = if (isLight) Color.White.copy(alpha = 0.85f) else Color.Black.copy(alpha = 0.50f)
+    val pillText = if (isLight) Color(0xFF1D1D1F) else Color.White
+
+    Surface(
+        onClick = onToggleTheme,
+        shape = ClickableSurfaceDefaults.shape(RoundedCornerShape(100.dp)),
+        colors = ClickableSurfaceDefaults.colors(
+            containerColor = pillBg,
+            focusedContainerColor = GoldBright,
+            contentColor = pillText,
+            focusedContentColor = OnGold,
+        ),
+        scale = ClickableSurfaceDefaults.scale(focusedScale = 1f),
+        border = ClickableSurfaceDefaults.border(
+            border = Border(BorderStroke(1.dp, Color.White.copy(alpha = 0.20f)), shape = RoundedCornerShape(100.dp)),
+            focusedBorder = Border(BorderStroke(2.dp, GoldBright), shape = RoundedCornerShape(100.dp)),
+        ),
+        modifier = modifier.graphicsLayer { scaleX = scale; scaleY = scale }.onFocusChanged { focused = it.isFocused },
+    ) {
+        Box(Modifier.heightIn(min = 44.dp).padding(horizontal = 20.dp), contentAlignment = Alignment.Center) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "Giao diện: ${if (isLight) "☀️ Light Mode" else "🌙 Dark Mode (Sang trọng)"}",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                )
             }
         }
     }

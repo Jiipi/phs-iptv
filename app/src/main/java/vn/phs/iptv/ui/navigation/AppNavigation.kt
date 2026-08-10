@@ -115,8 +115,11 @@ fun AppNavigation(stateMachine: AppStateMachine) {
         composable(Routes.LANGUAGE) {
             // Reached from the hub's rail and from the remote's HOME key. BACK returns to the
             // hub rather than dead-ending, since the guest already has a language set.
+            val themeMode by stateMachine.themeMode.collectAsStateWithLifecycle()
             LanguageScreen(
                 onSelected = { stateMachine.onLanguageSelected(it) },
+                themeMode = themeMode,
+                onToggleTheme = { stateMachine.toggleTheme() },
                 onBack = { stateMachine.navigateTo(AppScreen.Home) },
             )
         }
@@ -135,7 +138,6 @@ fun AppNavigation(stateMachine: AppStateMachine) {
                     onHelp = { stateMachine.navigateTo(AppScreen.Help) },
                     onServices = { stateMachine.navigateTo(AppScreen.Services) },
                     onHotelIntro = { stateMachine.navigateTo(AppScreen.HotelIntro) },
-                    onToggleTheme = { stateMachine.toggleTheme() },
                     language = language,
                 )
             }

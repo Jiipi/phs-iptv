@@ -26,6 +26,7 @@ import androidx.tv.material3.MaterialTheme
 import androidx.tv.material3.Text
 import vn.phs.iptv.ui.demo.Channel
 import vn.phs.iptv.ui.demo.Demo
+import vn.phs.iptv.ui.i18n.LocalUiStrings
 import vn.phs.iptv.ui.theme.AppleHeroBillboard
 import vn.phs.iptv.ui.theme.ApplePoster
 import vn.phs.iptv.ui.theme.AppleSubHeader
@@ -42,9 +43,10 @@ fun LiveTvScreen(onBack: () -> Unit) {
 
 @Composable
 private fun LiveTvContent(onBack: () -> Unit) {
+    val s = LocalUiStrings.current
     var featured by remember { mutableStateOf(Demo.channels.first()) }
-    val first = remember { FocusRequester() }
-    LaunchedEffect(Unit) { first.requestFocus() }
+    val back = remember { FocusRequester() }
+    LaunchedEffect(Unit) { back.requestFocus() }
 
     PivotScroll(margin = 0.16f) {
     LazyColumn(
@@ -53,11 +55,16 @@ private fun LiveTvContent(onBack: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(26.dp),
     ) {
         item {
-            AppleSubHeader(title = vn.phs.iptv.ui.i18n.LocalUiStrings.current.liveTv, trailing = "${Demo.channels.size} channels", onBack = onBack)
+            AppleSubHeader(
+                title = s.liveTv,
+                trailing = "${Demo.channels.size} ${s.liveChannelCount}",
+                onBack = onBack,
+                backModifier = Modifier.focusRequester(back),
+            )
         }
         item {
             AppleHeroBillboard(
-                eyebrow = "Now playing · Ch ${featured.number}",
+                eyebrow = "${s.liveNowPlaying} · ${featured.number}",
                 title = featured.name,
                 body = featured.nowPlaying,
                 imageUrl = featured.imageUrl,
@@ -65,17 +72,16 @@ private fun LiveTvContent(onBack: () -> Unit) {
                 onClick = {},
             )
         }
-        item { Text("All channels", style = MaterialTheme.typography.headlineLarge, color = TextPrimary) }
+        item { Text(s.liveAllChannels, style = MaterialTheme.typography.headlineLarge, color = TextPrimary) }
         item {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(28.dp),
                 verticalArrangement = Arrangement.spacedBy(28.dp),
             ) {
-                Demo.channels.forEachIndexed { i, ch ->
+                Demo.channels.forEach { ch ->
                     ChannelLockup(
                         channel = ch,
                         onFocus = { featured = ch },
-                        modifier = if (i == 0) Modifier.focusRequester(first) else Modifier,
                     )
                 }
             }

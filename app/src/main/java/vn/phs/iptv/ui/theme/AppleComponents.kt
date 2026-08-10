@@ -397,13 +397,9 @@ fun AppleGuestHeader(
             Text(subtitle, style = MaterialTheme.typography.titleMedium, color = TextSecondary)
         }
 
-        // Right cluster — one interactive row (theme toggle + language pill) plus metadata
+        // Right cluster — language pill plus metadata
         Column(horizontalAlignment = Alignment.End) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                ThemeTogglePill(onToggleTheme = onToggleTheme)
-                Spacer(Modifier.width(12.dp))
-                LanguagePill(language = language, onClick = onLanguage, modifier = languageModifier)
-            }
+            LanguagePill(language = language, onClick = onLanguage, modifier = languageModifier)
             Spacer(Modifier.height(18.dp))
             Text(
                 "${vn.phs.iptv.ui.i18n.LocalUiStrings.current.roomWord} $roomNo",

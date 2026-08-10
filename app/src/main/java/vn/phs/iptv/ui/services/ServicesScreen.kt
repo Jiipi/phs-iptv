@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -88,12 +88,10 @@ private fun ServicesContent(
     onBack: () -> Unit,
 ) {
     val s = LocalUiStrings.current
-    val first = remember { FocusRequester() }
+    val back = remember { FocusRequester() }
     val services = contentData?.services.orEmpty()
     var expandedId by remember { mutableStateOf<String?>(null) }
-    LaunchedEffect(services.size) {
-        if (services.isNotEmpty()) first.requestFocus()
-    }
+    LaunchedEffect(Unit) { back.requestFocus() }
 
     PivotScroll(margin = 0.16f) {
         LazyColumn(
@@ -106,6 +104,7 @@ private fun ServicesContent(
                     title = s.servicesTitle,
                     trailing = "${s.roomWord} ${guest.roomNo}",
                     onBack = onBack,
+                    backModifier = Modifier.focusRequester(back),
                 )
             }
             item { Text(s.servicesTitle, style = MaterialTheme.typography.displayMedium, color = TextPrimary) }
@@ -132,14 +131,13 @@ private fun ServicesContent(
                     )
                 }
             } else {
-                itemsIndexed(services) { index, service ->
+                items(services) { service ->
                     val id = "$index:${service.title.vi}:${service.title.en}"
                     ServiceRow(
                         service = service,
                         language = language,
                         expanded = expandedId == id,
                         onClick = { expandedId = if (expandedId == id) null else id },
-                        modifier = if (index == 0) Modifier.focusRequester(first) else Modifier,
                     )
                 }
             }

@@ -103,11 +103,14 @@ fun IntroVideoScreen(
             .focusRequester(skipFocus)
             .focusable()
             .onKeyEvent { e ->
-                if (e.type == KeyEventType.KeyUp &&
-                    (e.key == Key.DirectionCenter || e.key == Key.Enter)
-                ) {
-                    onEnded(); true
-                } else false
+                if (e.key == Key.DirectionCenter || e.key == Key.Enter) {
+                    // Consume the complete press. If KeyDown escapes, the matching KeyUp can
+                    // arrive after navigation and activate Home's first focused tile.
+                    if (e.type == KeyEventType.KeyUp) onEnded()
+                    true
+                } else {
+                    false
+                }
             },
     ) {
         Box(Modifier.fillMaxSize()) {
