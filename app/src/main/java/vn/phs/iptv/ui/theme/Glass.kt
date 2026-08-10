@@ -64,21 +64,21 @@ fun Modifier.glassSurface(
     val isLight = LocalAppThemeMode.current == AppThemeMode.LIGHT
 
     val fillAlpha by animateFloatAsState(
-        targetValue = if (focused) (if (isLight) 0.82f else 0.14f) else (if (isLight) 0.62f else 0.07f),
+        targetValue = if (focused) (if (isLight) 0.62f else 0.14f) else (if (isLight) 0.42f else 0.07f),
         animationSpec = tween(FocusDurationMs, easing = FocusEasing),
         label = "glassFill",
     )
     val borderAlpha by animateFloatAsState(
-        targetValue = if (focused) (if (isLight) 0.70f else 0.22f) else (if (isLight) 0.35f else 0.12f),
+        targetValue = if (focused) (if (isLight) 0.45f else 0.22f) else (if (isLight) 0.18f else 0.12f),
         animationSpec = tween(FocusDurationMs, easing = FocusEasing),
         label = "glassBorder",
     )
 
     val baseFillColor = Color.White
-    val borderColor = if (focused) Gold else (if (isLight) Color.White.copy(alpha = borderAlpha) else Color.White.copy(alpha = borderAlpha))
+    val borderColor = if (focused) Gold else (if (isLight) Color(0xFFD6D0C4).copy(alpha = borderAlpha) else Color.White.copy(alpha = borderAlpha))
     val glassSheen = if (isLight) {
         Brush.verticalGradient(
-            0.0f to Color.White.copy(alpha = 0.45f),
+            0.0f to Color.White.copy(alpha = 0.18f),
             0.45f to Color.Transparent,
         )
     } else GlassSheen

@@ -105,14 +105,14 @@ fun HomeNavRail(
                 .focusGroup()
                 .background(
                     Brush.horizontalGradient(
-                        0f to railBase.copy(alpha = if (isLight) 0.70f else 0.93f),
-                        0.7f to railBase.copy(alpha = if (isLight) 0.45f else 0.80f),
+                        0f to railBase.copy(alpha = if (isLight) 0.88f else 0.93f),
+                        0.7f to railBase.copy(alpha = if (isLight) 0.68f else 0.80f),
                         1f to Color.Transparent,
                     ),
                 )
                 .background(
                     Brush.horizontalGradient(
-                        0f to (if (isLight) Color.Black.copy(alpha = 0.04f) else Color.White.copy(alpha = 0.06f)),
+                        0f to (if (isLight) Color.Black.copy(alpha = 0.06f) else Color.White.copy(alpha = 0.06f)),
                         0.8f to Color.Transparent,
                     ),
                 )

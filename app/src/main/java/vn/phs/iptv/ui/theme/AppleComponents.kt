@@ -113,16 +113,16 @@ fun AppleDynamicBackdrop(imageUrl: String?, modifier: Modifier = Modifier) {
         Box(
             Modifier.fillMaxSize().background(
                 Brush.verticalGradient(
-                    0f to scrimBase.copy(alpha = if (isLight) 0.38f else 0.46f),
-                    0.55f to scrimBase.copy(alpha = if (isLight) 0.58f else 0.76f),
-                    1f to scrimBase.copy(alpha = if (isLight) 0.78f else 0.96f),
+                    0f to scrimBase.copy(alpha = if (isLight) 0.52f else 0.46f),
+                    0.55f to scrimBase.copy(alpha = if (isLight) 0.70f else 0.76f),
+                    1f to scrimBase.copy(alpha = if (isLight) 0.88f else 0.96f),
                 ),
             ),
         )
         // Left scrim so the headline column reads cleanly
         Box(
             Modifier.fillMaxSize().background(
-                Brush.horizontalGradient(0f to scrimBase.copy(alpha = if (isLight) 0.35f else 0.5f), 0.65f to Color.Transparent),
+                Brush.horizontalGradient(0f to scrimBase.copy(alpha = if (isLight) 0.48f else 0.5f), 0.65f to Color.Transparent),
             ),
         )
     }
